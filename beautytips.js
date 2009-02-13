@@ -1,10 +1,8 @@
 if (Drupal.jsEnabled) {
   $(document).ready(function() {
-  	$('form .form-item input.form-text + .description').prev('input').bt({
+  	$('form .form-item input.form-text + .description').hide().prev('input').bt({
 	    trigger: ['focus', 'blur'],
-	    positions: ['bottom']
+	    positions: [bt_direction]
 	  });
-	  $('form .form-item input + .description').hide();
-	//$('form .form-item input + .description').hide();
   });
 }

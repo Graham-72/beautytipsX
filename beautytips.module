@@ -1,11 +1,22 @@
 <?php
 // $Id: beautytips.module
 
+/**
+ * @file
+ * Creates settings page and inserts the javascript onto the site's pages.
+ */
+
 function beautytips_admin() {
-  $form['beautytips_popup'] = array(
+  $form['beautytips_turnon'] = array(
     '#type' => 'checkbox',
     '#title' => 'Turn on Beauty Tips',
-    '#default_value' => variable_get('beautytips_popup', FALSE),
+    '#default_value' => variable_get('beautytips_turnon', FALSE),
+  );
+  $form['beautytips_direction'] = array(
+    '#type' => 'radios',
+    '#title' => 'Which side should the popup appear on?',
+    '#options' => array('bottom' => t('bottom'), 'top' => t('top'), 'left' => t('left'), 'right' => t('right')),
+    '#default_value' => variable_get('beautytips_direction', 'bottom'),
   );
   $form['#submit'][] = 'beautytips_admin_submit';
   return system_settings_form($form);
@@ -35,7 +46,7 @@ function beautytips_menu() {
  * Implementation of hook_theme_registry_alter.
  */
 function beautytips_theme_registry_alter(&$theme_registry) {
-  if (variable_get('beautytips_popup', FALSE)) {
+  if (variable_get('beautytips_turnon', FALSE)) {
     $theme_registry['form']['function'] = 'theme_beautytips_form';
     $theme_registry['textfield']['function'] = 'theme_beautytips_textfield';
   }
@@ -47,9 +58,10 @@ function beautytips_theme_registry_alter(&$theme_registry) {
 function theme_beautytips_form($element) {
   // Add a jQuery script for the popups
   $path = drupal_get_path('module', 'beautytips');
-  drupal_add_js( $path . '/jquery.bt.js');
-  drupal_add_js( $path . '/popup.js');
-  drupal_add_css($path . '/jquery.bt.css');
+  drupal_add_js("var bt_direction = " . drupal_to_js(variable_get('beautytips_direction', 'bottom')) . ";", 'inline');
+  drupal_add_js( $path .'/jquery.bt.js');
+  drupal_add_js( $path .'/beautytips.js');
+  drupal_add_css($path .'/jquery.bt.css');
 
   // Anonymous div to satisfy XHTML compliance.
   $action = $element['#action'] ? 'action="'. check_url($element['#action']) .'" ' : '';
@@ -78,6 +90,7 @@ function theme_beautytips_textfield($element) {
   }
 
   $output .= '<input type="text"'. $maxlength .' name="'. $element['#name'] .'" id="'. $element['#id'] .'"'. $size .' value="'. check_plain($element['#value']) .'"'. drupal_attributes($element['#attributes']);
+  // If this has a description, set the title equal to the description, so that it will display in popup.
   if(!empty($element['#description'])) {
     $output .= 'title="' . $element['#description'] .'"';
   }
