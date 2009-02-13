@@ -1,0 +1,5 @@
+; $Id beautytips.info
+
+name = Beauty Tips
+description = Implements jQuery Beauty Tips Tooltip plugin
+core = 6.x
