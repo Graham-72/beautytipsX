@@ -3,7 +3,7 @@
 
 /**
  * @file
- * Creates settings page and inserts the javascript onto the site's pages.
+ * Creates beautyips settings page and adds beautytips popups.
  */
 
 function beautytips_admin() {
@@ -32,7 +32,7 @@ function beautytips_admin() {
 function beautytips_menu() {
   $items = array();
   $items['admin/settings/beautytips'] = array(
-    'title' => 'Beauty Tips settings',
+    'title' => 'Beautytips',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('beautytips_admin'),
     'access arguments' => array('administer site configuration'),
@@ -45,13 +45,71 @@ function beautytips_menu() {
  */
 function beautytips_form_alter(&$form, $form_state, $form_id) {
   if (variable_get('beautytips_turnon', FALSE)) {
-    // Add the jQuery script for the popups, pass variables into javascript
     $path = drupal_get_path('module', 'beautytips');
     drupal_add_js("var bt_direction = " . drupal_to_js(variable_get('beautytips_direction', 'bottom')) . ";", 'inline');
-    drupal_add_js("var bt_drupal_help = " . drupal_to_js(variable_get('beautytips_drupal_help', FALSE)) . ";", 'inline');
-    drupal_add_js( $path .'/jquery.bt.js');
-    drupal_add_js( $path .'/beautytips.js');
-    drupal_add_js( $path .'other_libs/excanvas_002/excanvas.js');
-    drupal_add_css($path .'/jquery.bt.css');
+    drupal_add_js($path .'/beautytips.js');    
+
+    $options = array();
+    $options['bt_text_field'] = array(
+        'area' => 'input.form-text',
+        'trigger' => array(0 => 'focus', 1 => 'blur'),
+        'description' => TRUE,
+      );
+    $options['bt_text_area'] = array(
+      'area' => 'textarea.form-textarea',
+      'trigger' => array(0 => 'focus', 1 => 'blur'),
+      'description' => TRUE,
+    );
+    beautytips_add_beautytips($options);
+  }
+  if (variable_get('beautytips_drupal_help', FALSE)) {
+     $options = array();
+     $options['bt_drupal_help'] = array(
+        'area' => '.more-help-link a',
+        'description' => FALSE,
+        'ajaxPath' => "$(this).attr('href')",
+        'ajaxDiv' => '#squeeze.clear-block p',
+     );
+     beautytips_add_beautytips($options);
+  }
+  elseif (!variable_get('beautytips_turnon', FALSE)) {
+    beautytips_add_beautytips();
   }
 }
+
+function beautytips_add_beautytips($options = NULL) {
+  static $added = FALSE;
+  $settings = array('beautytips' => array());
+  
+  if (is_array($options)) {
+    $settings['beautytips'] = array();
+      foreach ($options as $beautytip => $content) {
+        if (is_array($content)) {
+          $settings['beautytips'][$beautytip] = $content;
+          if (!isset($content['ajaxPath'])) {
+            $settings['beautytips'][$beautytip]['ajaxPath'] = NULL;
+            $settings['beautytips'][$beautytip]['ajaxDiv'] = NULL;
+          }
+          if (!isset($content['trigger'])) {
+            $settings['beautytips'][$beautytip]['trigger'] = 'hover';
+          }
+        }
+      }
+  }
+  
+  // Add beautytips jQuery plugin
+  if (!$added) {
+    $path = drupal_get_path('module', 'beautytips');
+    drupal_add_js($path .'/jquery.bt.js');
+    drupal_add_css($path .'/jquery.bt.css');
+    
+    //if IE add this
+    drupal_add_js($path .'/other_libs/ex_canvas_0002/excanvas.js');
+    $added = TRUE;
+  }
+  drupal_add_js( $settings, 'setting' );
+}
+
+/*
+* In options array maybe - div, ajaxPath(ajaxid), parents, hide position, trigger, width, fill
+*/

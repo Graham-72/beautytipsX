@@ -1,28 +1,22 @@
-if (Drupal.jsEnabled) {
-  $(document).ready(function() {
-    var text = ['textarea.form-textarea', '.form-text'];
-    for (var i = 0; i < text.length; i++) {
-      $(text[i]).each(function() {
+Drupal.behaviors.beautytips = function() {
+    for( key in Drupal.settings.beautytips) {
+      $(Drupal.settings.beautytips[key]['area'][0]).each(function() {
         var description = $(this).parents('.form-item').find('.description').hide().html();
-        if (description) {
+        if (description && Drupal.settings.beautytips[key]['description'][0]) {
           $(this).bt(description, {
-            trigger: ['focus', 'blur'],
-  	        positions: [bt_direction]
+            trigger: [Drupal.settings.beautytips[key]['trigger'][0], Drupal.settings.beautytips[key]['trigger'][1]],
+  	        positions: [bt_direction],
+            ajaxPath: Drupal.settings.beautytips[key]['ajaxPath'][0] + Drupal.settings.beautytips[key]['ajaxDiv'][0]
+          });
+        }
+        else if (!Drupal.settings.beautytips[key]['description'][0]) {
+          $(this).bt({
+            trigger:  Drupal.settings.beautytips[key]['trigger'][0],
+            ajaxPath:  Drupal.settings.beautytips[key]['ajaxPath'][0] + Drupal.settings.beautytips[key]['ajaxDiv'][0],
+            width: 300,
+            cssStyles: {width: 'auto', paddingTop: 0, paddingBottom: 0},
           });
         }
       });
     }
-    if (bt_drupal_help) {
-	  $('.more-help-link a').each(function() {
-	    $(this).bt({
-		  width: 300,
-		  ajaxPath: $(this).attr('href') + '#squeeze.clear-block p',
-		  cssStyles: {width: 'auto', paddingTop: 0, paddingBottom: 0},
-		  cornerRadius: 15,
-		  strokeStyle: 'rgb(45, 72, 103)',
-		  ajaxLoading: '<p><blink>Loading...</blink></p>'
-	    });
-	  });
-    }
-  });
 }
