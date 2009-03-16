@@ -1,5 +1,5 @@
 ; $Id$
 
-name = Beauty Tips
+name = BeautyTips
 description = Implements jQuery Beauty Tips Tooltip plugin
 core = 6.x

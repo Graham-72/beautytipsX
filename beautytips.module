@@ -3,25 +3,25 @@
 
 /**
  * @file
- * Creates beautyips settings page and adds beautytips popups.
+ * Creates settings page and inserts the javascript onto the site's pages.
  */
 
 function beautytips_admin() {
-  $form['beautytips_turnon'] = array(
+  $form['beautytips_text_input'] = array(
     '#type' => 'checkbox',
-    '#title' => 'Turn on Beauty Tips',
-    '#default_value' => variable_get('beautytips_turnon', FALSE),
+    '#title' => 'Display Text input popups',
+    '#default_value' => variable_get('beautytips_text_input', FALSE),
   );
   $form['beautytips_drupal_help'] = array(
     '#type' => 'checkbox',
-    '#title' => 'Turn on help link popups',
+    '#title' => 'Display Help link popups',
     '#default_value' => variable_get('beautytips_drupal_help', FALSE),
   );
-  $form['beautytips_direction'] = array(
+  $form['beautytips_position'] = array(
     '#type' => 'radios',
-    '#title' => 'Which side should the popup appear on?',
+    '#title' => 'Which side should the text popups appear on?',
     '#options' => array('bottom' => t('bottom'), 'top' => t('top'), 'left' => t('left'), 'right' => t('right')),
-    '#default_value' => variable_get('beautytips_direction', 'bottom'),
+    '#default_value' => variable_get('beautytips_position', 'bottom'),
   );
   return system_settings_form($form);
 }
@@ -32,7 +32,7 @@ function beautytips_admin() {
 function beautytips_menu() {
   $items = array();
   $items['admin/settings/beautytips'] = array(
-    'title' => 'Beautytips',
+    'title' => 'BeautyTips',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('beautytips_admin'),
     'access arguments' => array('administer site configuration'),
@@ -41,75 +41,99 @@ function beautytips_menu() {
 }
  
 /**
- * Implementation of hook_form_alter.
+ * Implementation of hook_init.
  */
-function beautytips_form_alter(&$form, $form_state, $form_id) {
-  if (variable_get('beautytips_turnon', FALSE)) {
-    $path = drupal_get_path('module', 'beautytips');
-    drupal_add_js("var bt_direction = " . drupal_to_js(variable_get('beautytips_direction', 'bottom')) . ";", 'inline');
-    drupal_add_js($path .'/beautytips.js');    
-
+function beautytips_init() {
+    
+  if (variable_get('beautytips_text_input', FALSE)) {
+    $path = drupal_get_path('module', 'beautytips') .'/bt_text_box.js';
     $options = array();
     $options['bt_text_field'] = array(
-        'area' => 'input.form-text',
-        'trigger' => array(0 => 'focus', 1 => 'blur'),
-        'description' => TRUE,
-      );
+      'area' => 'input.form-text',
+      'trigger' => array(0 => 'focus', 1 => 'blur'),
+      'contentSelector' => "$(this).next('.description').hide().html()",
+      'additionalJavascript' => $path,
+      'position' => variable_get('beautytips_position', 'bottom'),
+    );
     $options['bt_text_area'] = array(
       'area' => 'textarea.form-textarea',
       'trigger' => array(0 => 'focus', 1 => 'blur'),
-      'description' => TRUE,
+      'contentSelector' => "$(this).parents('.form-item').find('.description').hide().html()",
+      'additionalJavascript' => $path,
+      'position' => variable_get('beautytips_position', 'bottom'),
     );
     beautytips_add_beautytips($options);
   }
+
   if (variable_get('beautytips_drupal_help', FALSE)) {
-     $options = array();
-     $options['bt_drupal_help'] = array(
-        'area' => '.more-help-link a',
-        'description' => FALSE,
-        'ajaxPath' => "$(this).attr('href')",
-        'ajaxDiv' => '#squeeze.clear-block p',
-     );
-     beautytips_add_beautytips($options);
-  }
-  elseif (!variable_get('beautytips_turnon', FALSE)) {
-    beautytips_add_beautytips();
+    $options = array();
+    $options['bt_drupal_help'] = array(
+      'area' => '.more-help-link a',
+      'ajaxPath' => '#squeeze.clear-block p',
+      'trigger' => array(0 => 'mouseover', 1 => 'click'),
+      'width' => 350,
+    );
+    $options['bt_drupal_help_page'] = array(
+      'area' => '.help-items li a',
+      'ajaxPath' => '#squeeze.clear-block p',
+      'trigger' => array(0 => 'mouseover', 1 => 'click'),
+      'width' => 350,
+    );
+    beautytips_add_beautytips($options);
   }
 }
 
+/**
+ * Call this function to add beautytips.
+ * TODO: add some documentation
+ */
 function beautytips_add_beautytips($options = NULL) {
   static $added = FALSE;
   $settings = array('beautytips' => array());
   
   if (is_array($options)) {
     $settings['beautytips'] = array();
-      foreach ($options as $beautytip => $content) {
-        if (is_array($content)) {
-          $settings['beautytips'][$beautytip] = $content;
-          if (!isset($content['ajaxPath'])) {
-            $settings['beautytips'][$beautytip]['ajaxPath'] = NULL;
-            $settings['beautytips'][$beautytip]['ajaxDiv'] = NULL;
-          }
-          if (!isset($content['trigger'])) {
-            $settings['beautytips'][$beautytip]['trigger'] = 'hover';
-          }
+    foreach ($options as $beautytip => $content) {
+      if (is_array($content)) {
+        $settings['beautytips'][$beautytip] = $content;
+        if (!isset($content['trigger'])) {
+          $settings['beautytips'][$beautytip]['trigger'] = 'hover';
+        }
+        if (!isset($content['contentSelector'])) {
+          $settings['beautytips'][$beautytip]['contentSelector'] = "$(this).attr('title')";
+        }
+        if (!isset($content['width'])) {
+          $settings['beautytips'][$beautytip]['width'] = 200;
+        }
+        if ($content['additionalJavascript']) {
+          drupal_add_js($content['additionalJavascript']);
         }
       }
+    }
+    if ($added) {
+      drupal_add_js( $settings, 'setting' );
+    }
   }
   
   // Add beautytips jQuery plugin
   if (!$added) {
     $path = drupal_get_path('module', 'beautytips');
-    drupal_add_js($path .'/jquery.bt.js');
+    drupal_add_js($path .'/jquery.bt.min.js');
     drupal_add_css($path .'/jquery.bt.css');
+    drupal_add_js($path .'/beautytips.js');
     
     //if IE add this
-    drupal_add_js($path .'/other_libs/ex_canvas_0002/excanvas.js');
+    $expath = $path .'/other_libs/excanvas_0002';
+    if (file_check_directory($expath)) {
+      drupal_add_js($expath .'/excanvas.js');
+    }
+    else {
+      drupal_set_message('In order for BeautyTips to function correctly in Internet Explorer, the Excanvas library needs to be added.  (See the BeautyTips Readme.txt file for more information.)');
+    }
+    drupal_add_js( $settings, 'setting');
     $added = TRUE;
   }
-  drupal_add_js( $settings, 'setting' );
 }
-
 /*
-* In options array maybe - div, ajaxPath(ajaxid), parents, hide position, trigger, width, fill
+* In options array maybe - trigger, width, fill, shadow
 */
