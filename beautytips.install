@@ -1,0 +1,17 @@
+<?php 
+// $Id:
+
+/**
+ * @file
+ * beautyTips install/uninstall hooks
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function beautytips_install() {
+  $path = drupal_get_path('module', 'beautytips') .'/other_libs/excanvas_0002';
+  if (!file_check_directory($path)) {
+    drupal_set_message('WARNING! In order for BeautyTips to function correctly in Internet Explorer, the Excanvas library needs to be added.  (See the BeautyTips Readme.txt file for more information.)');
+  }
+}

@@ -127,9 +127,6 @@ function beautytips_add_beautytips($options = NULL) {
     if (file_check_directory($expath)) {
       drupal_add_js($expath .'/excanvas.js');
     }
-    else {
-      drupal_set_message('In order for BeautyTips to function correctly in Internet Explorer, the Excanvas library needs to be added.  (See the BeautyTips Readme.txt file for more information.)');
-    }
     drupal_add_js( $settings, 'setting');
     $added = TRUE;
   }
