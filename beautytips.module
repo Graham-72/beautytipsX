@@ -124,7 +124,7 @@ function beautytips_add_beautytips($options = NULL) {
     
     //if IE add this
     $expath = $path .'/other_libs/excanvas_0002';
-    if (file_check_directory($expath)) {
+    if (count(file_scan_directory($expath, 'excanvas.js', array('.', '..', 'CVS'), 0, FALSE))) {
       drupal_add_js($expath .'/excanvas.js');
     }
     drupal_add_js( $settings, 'setting');
