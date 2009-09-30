@@ -1,5 +1,5 @@
 ; $Id$
 
-name = BeautyTips
-description = Implements jQuery Beauty Tips Tooltip plugin
+name = BeautyTips API
+description = API for implementing jQuery beautyTips tooltip plugin
 core = 6.x

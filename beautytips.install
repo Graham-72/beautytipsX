@@ -10,8 +10,13 @@
  * Implementation of hook_install().
  */
 function beautytips_install() {
-  $path = drupal_get_path('module', 'beautytips') .'/other_libs/excanvas_0002';
-  if (!file_check_directory($path)) {
-    drupal_set_message('WARNING! In order for BeautyTips to function correctly in Internet Explorer, the Excanvas library needs to be added.  (See the BeautyTips Readme.txt file for more information.)');
+  // Display IE warning
+  $path = drupal_get_path('module', 'beautytips');
+  $link_readme = l('BeautyTips Readme.txt', $path .'/README.txt');
+  if (!count(file_scan_directory($path . '/other_libs/excanvas_r3', 'excanvas.js', array('.', '..', 'CVS'), 0, FALSE))) {
+    drupal_set_message(t('WARNING! In order for BeautyTips to function correctly in Internet Explorer, the Excanvas library needs to be added. (See the !readme_file for more information.)', array('!readme_file' => $link_readme)), $type = 'warning');
   }
+
+  // Set basic defaults
+  variable_set('beautytips_defaults', array('cssStyles' => array()));
 }
