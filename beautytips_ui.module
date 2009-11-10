@@ -3,11 +3,9 @@
 
 /**
  * @file
- * Provides API for adding beautytips to pages.
- * Adds Beautytips settings page and provides some built in functionality.
- * INCLUDES INVOKE: admin_menu, menu_alter, theme_registry_alter, form_alter
+ * Adds includes to Beautytips settings page and provides some built in functionality.
  * TODO: hook_theme invoke - maybe
- * CALLED: admin_info, menu_change, theme_change, form_change, menu_items
+ * Invoked include hooks: admin_info, menu_change, theme_change, form_change, menu_items
  * ex.  beautytips_textinput_info
  */
 
@@ -25,35 +23,15 @@ function beautytips_ui_admin_settings(&$form) {
       }
     }
   }
-  $form['beautytips_styles'] = array(
-    '#type' => 'radios',
-    '#title' => t('Choose a style'),
-    '#description' => t('Mouse over the radio buttons to see a preview.'),
-    '#options' => array(
-      'default' => t('default'),
-      'netflix' => t('Netflix'),
-      'facebook' => t('Facebook'),
-      'transparent' => t('Transparent with Big Text'),
-      'big_green' => t('Green with no border'),
-      'google_maps' => t('Google Maps'),
-    ),
-    '#default_value' => variable_get('beautytips_styles', 'default'),
-  );
-  
-  $path = drupal_get_path('module', 'beautytips') .'/js/bt_admin_page.js';
-  drupal_add_js($path);
-  beautytips_add_beautytips();
 }
 
 /**
  *  Clear menu cache and theme registry in case beautytips help tips turned on or off
  */
 function beautytips_ui_admin_submit($form, $form_state) {
-  variable_set('beautytips_always_add', $form_state['values']['beautytips_always_add']);
   module_invoke('menu', 'rebuild');
   cache_clear_all('*', 'cache_menu', TRUE);
   drupal_rebuild_theme_registry();
-  beautytips_ui_set_style($form_state['values']['beautytips_styles']); 
 }
 
 /**
@@ -119,7 +97,7 @@ function beautytips_ui_include_invoke($module, $hook, $args) {
  * @return
  *   An array of all loaded includes. (w/o appended .inc)
  */
- // ACTUALLY, THIS NEEDS TO CHANGE - ONLY INCLUDE THE ITEMS NEEDED - MAYBE
+ // TODO: This may need to change - only unclude the items needed - maybe
 function beautytips_ui_include_list() {
   static $list = array();
   $dir = drupal_get_path('module', 'beautytips') .'/includes';
@@ -133,112 +111,17 @@ function beautytips_ui_include_list() {
 }
 
 /**
- *  See jQuery.bt.js for descriptions of defaults
- *  Sets the default style for beautytips
- */
-function beautytips_ui_set_style($style) {
-  $bt_defaults = array();
-  // The default style isn't necessarily needed here.
-  switch ($style) {
-    case 'default':
-      $bt_defaults = array(
-        'cssStyles' => array(),
-      );
-      break;
-      
-    case 'netflix':
-      $bt_defaults = array(
-        'positions' => array(0 => 'right', 1 => 'left'),
-        'fill' => '#FFF',
-        'padding' => 5,
-        //'shadow' => true, //Reimplement shadow when issue is fixed
-        //'shadowBlur' => 12,
-        'strokeStyle' => '#B9090B',
-        'spikeLength' => 50,
-        'spikeGirth' => 60,
-        'cornerRadius' => 10,
-        'centerPointY' => .1,
-        'overlap' => -8,
-        'cssStyles' => array(
-          'fontSize' => '12px',
-          'fontFamily' => 'arial,helvetica,sans-serif',
-        ),
-      );
-      break;
-
-    case 'facebook':
-      $bt_defaults = array(
-        'fill' => '#F7F7F7',
-        'padding' => 8,
-        'strokeStyle' => '#B7B7B7',
-        'cornerRadius' => 0,
-        'cssStyles' => array(
-          'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
-          'fontSize' => '11px',
-        ),
-      );
-      break;
-      
-    case 'transparent':
-      $bt_defaults = array(
-        'fill' => 'rgba(0, 0, 0, .8)',
-        'padding' => 20,
-        'strokeStyle' => '#CC0',
-        'strokeWidth' => 3,
-        'spikeLength' => 40,
-        'spikeGirth' => 40,
-        'cornerRadius' => 40,
-        'cssStyles' => array(
-          'color' => '#FFF',
-          'fontWeight' => 'bold',
-        ),
-      );
-      break;
-      
-      case 'big_green':
-        $bt_defaults = array(
-          'fill' => '#00FF4E',
-          'padding' => 20,
-          'strokeWidth' => 0,
-          'spikeLength' => 40,
-          'spikeGirth' => 40,
-          'cornerRadius' => 15,
-          'cssStyles' => array(
-            'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
-            'fontSize' => '14px',
-          ),
-        );
-        break;
-        
-        case 'google_maps':
-          $bt_defaults = array(
-            'positions' => array(0 => 'top', 1 => 'bottom'),
-            'fill' => '#FFF',
-            'padding' => 15,
-            'strokeStyle' => '#ABABAB',
-            'strokeWidth' => 1,
-            'spikeLength' => 65,
-            'spikeGirth' => 40,
-            'cornerRadius' => 25,
-            'centerPointX' => .9,
-            'cssStyles' => array(),
-          );
-          break;
-  }   
-  variable_set('beautytips_defaults', $bt_defaults);
-}
-
-/**
  * Implementation of hook_form_alter.
  * Adds beautytips for textareas and textfields
  */
 function beautytips_ui_form_alter(&$form, $form_state, $form_id) {
-  beautytips_ui_include_invoke('beautytips', 'form_change', array(
+  beautytips_ui_include_invoke('beautytips', 'form_change', 
+    array(
       'form' => &$form,
       'form_state' => $form_state,
       'form_id' => $form_id,
     )
-  );    
+  );   
 }
 
 /**

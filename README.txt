@@ -4,6 +4,9 @@
   In order for this module to work properly with IE, you will need to download the 
   ExplorerCanvas library, which can be found here - http://excanvas.sourceforge.net/.
   Place the downloaded directory 'excanvas_r3' inside the 'beautytips/other_libs' directory.
+  Also, make sure that this file is accessable (readable).  A standard permission setting 
+  of 755 should work for the excanvas_r3 folder (755 means permission settings - rwxr-xr-x)
+  On Linux or Mac, you can do this with the command 'sudo chmod -R 755 excanvas_r3'
 
   Other than that, you just need to turn the module on in the usual Drupal way.
 
@@ -11,10 +14,10 @@
                                    ABOUT THE MODULE
     
   The Beautytips module provides ballon-help style tooltip for any page element. 
-  It integrates BeautyTips jQuery plugin by Jeff Robbins with Drupal.  Currently, this 
-  module allows tooltips to appear with textfields and textareas.  It also supplies hover
-  tips for Drupal help links and advanced help links.  Most importantly, it allows developers
-  to add their own beautytips popups to their site without having to delve into jQuery.
+  It integrates BeautyTips jQuery plugin by Jeff Robbins with Drupal.  This module provides 
+  an API for adding custom tooltips to your site.  It also has some built-in features allows
+  such as allowing an administrator to add tooltips to textfields and textareas.  It also 
+  supplies hover tips for Drupal help links and advanced help links.
   
   For information about the Beauty Tips jQuery plugin:
     http://www.lullabot.com/articles/announcing-beautytips-jquery-tooltip-plugin
