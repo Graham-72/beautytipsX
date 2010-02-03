@@ -67,7 +67,7 @@ function beautytips_add_beautytips($options = NULL) {
       if (is_array($content)) {
         $settings['beautytips'][$beautytip] = $content;
         $get_keys = array_keys($content);
-        $keys_no_add = array('cssSelect', 'list', 'text', 'preEval');
+        $keys_no_add = array('cssSelect', 'list', 'text', 'preEval', 'ajaxDisableLink');
         $count = 0;
         for ($i = 0; $i < count($content); $i++) {
           $key = $get_keys[$i];

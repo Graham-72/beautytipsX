@@ -1,3 +1,6 @@
+/**
+ * jQuery to show on beautytips admin settings page
+ */
 Drupal.behaviors.beautytipsAdmin = function() {
 
   if (!$("#edit-beautytips-always-add").attr("checked")) {
@@ -18,57 +21,62 @@ Drupal.behaviors.beautytipsAdmin = function() {
     }
   });
 
-  var popup_test = "Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi fermentum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien."
-  $("#beautytips-site-wide-popup").bt(popup_test, {
+  var popupText = "Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi fermentum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien."
+  $("#beautytips-site-wide-popup").bt(popupText, {
     positions: ['right']
   });
 
-  theme_settings = beautytipsGetThemeSettings();
+  themeSettings = beautytipsGetThemeSettings();
+  currentTheme = $("input[name='beautytips_default_style']:checked").val(); 
+  $("#beauty-default-styles input").click(function() {
+    currentTheme = $("input[name='beautytips_default_style']:checked").val();
+  });
 
-  // TODO: This needs is still in the experimental stage
+  // TODO: This is still in the experimental stage - the drop shadow is still an issue
   $("#beautytips-popup-changes").click( function() {
-    var options = new Array();
-    options['positions'] = 'right';
-    options['trigger'] = ['dblclick', 'mouseout'];
+    options = beautytipsSetupDefaultOptions(themeSettings[currentTheme]); 
     $("#beautytips-site-wide-popup").next('fieldset').find('.fieldset-wrapper').children('.form-item').each( function() {
-      var new_value = $(this).find('input').val();
-      //var old_value = $(this).find('input').attr('value'); 
+      var newValue = $(this).find('input').val();
       var name = $(this).find('input').attr('name'); 
+      var optionName = name.replace("bt-options-", ""); 
       if (name == 'bt-options-shadow') {
-        new_value = $(this).find('input').attr("checked") ? true : false;
+        newValue = $(this).find('input').attr("checked") ? true : false;
       }
-      if (new_value || new_value === false) {
-        var option_name = name.replace("bt-options-", ""); 
-        if (option_name == 'cornerRadius') {
-          new_value = Number(new_value);
+      if (newValue || newValue === false) {
+        if (optionName == 'cornerRadius') {
+          newValue = Number(newValue);
         }
-        options[option_name] = new_value;
+        options[optionName] = newValue;
       }
-      /*else { 
-        if (theme_settings[current_theme][option_name]) {
-          options[option_name] = theme_settings[current_theme][option_name]; 
-        }
-        else {
-          options[option_name] = jQuery.bt.defaults[option_name]; 
-          alert(jQuery.bt.defaults[option_name]);
-        }
-      }*/
     });
-    $(this).bt(popup_test, options);
+    $(this).bt(popupText, options);
   });
  
   // Beautytips examples shown on Beautytips settings page
-  $('#edit-beautytips-default-style-default-wrapper label').bt('This is the default style balloon.', theme_settings['default']);
-  $('#edit-beautytips-default-style-netflix').bt('This is the netflix style balloon.', theme_settings['netflix']);
-  $('#edit-beautytips-default-style-facebook').bt('This is a facebook style balloon.', theme_settings['facebook']);
-  $('#edit-beautytips-default-style-transparent').bt('This balloon is transparent with big white text.', theme_settings['transparent']);
-  $('#edit-beautytips-default-style-big-green').bt('This balloon is green with no border and large text.', theme_settings['big_green']);
-  $('#edit-beautytips-default-style-google-maps').bt('This is a Google maps styled balloon.', theme_settings['google_maps']); 
+  $('#edit-beautytips-default-style-default-wrapper label').bt('This is the default style balloon.', themeSettings['default']);
+  $('#edit-beautytips-default-style-netflix').bt('This is the netflix style balloon.', themeSettings['netflix']);
+  $('#edit-beautytips-default-style-facebook').bt('This is a facebook style balloon.', themeSettings['facebook']);
+  $('#edit-beautytips-default-style-transparent').bt('This balloon is transparent with big white text.', themeSettings['transparent']);
+  $('#edit-beautytips-default-style-big-green').bt('This balloon is green with no border and large text.', themeSettings['big_green']);
+  $('#edit-beautytips-default-style-google-maps').bt('This is a Google maps styled balloon.', themeSettings['google_maps']); 
+}
+
+function beautytipsSetupDefaultOptions(themeSettings) {
+  var options = new Array();
+  options = jQuery.bt.defaults;
+
+  for (var key in themeSettings) {
+    options[key] = themeSettings[key];
+  }
+  options['positions'] = 'right';
+  options['trigger'] = ['dblclick', 'mouseout'];
+
+  return options;
 }
 
 function beautytipsGetThemeSettings() {
-  theme_settings = new Array();
-  theme_settings['default'] = {
+  themeSettings = new Array();
+  themeSettings['default'] = {
     positions: ['right'],
     overlap: 0,
     centerPointY: .5,
@@ -84,7 +92,7 @@ function beautytipsGetThemeSettings() {
     shadowBlur: 3, 
     cssStyles: {}
   } 
-  theme_settings['netflix'] = {
+  themeSettings['netflix'] = {
     positions: ['right'],
     overlap: -8,
     centerPointY: .1,
@@ -104,7 +112,7 @@ function beautytipsGetThemeSettings() {
       fontFamily: 'arial,helvetica,sans-serif'
     }
   } 
-  theme_settings['facebook'] = {
+  themeSettings['facebook'] = {
     positions: ['right'],
     overlap: 0,
     centerPointY: .5,
@@ -123,7 +131,7 @@ function beautytipsGetThemeSettings() {
       fontSize: '11px'
     }
   }
-  theme_settings['transparent'] = {
+  themeSettings['transparent'] = {
     positions: ['right'],
     overlap: 0,
     padding: 20,
@@ -142,7 +150,7 @@ function beautytipsGetThemeSettings() {
     shadowBlur: 3,
     cssStyles: {color: '#FFF', fontWeight: 'bold'}
   }
-  theme_settings['big_green'] = {
+  themeSettings['big_green'] = {
     positions: ['right'],
     width: 300,
     fill: '#00FF4E',
@@ -161,7 +169,7 @@ function beautytipsGetThemeSettings() {
       fontSize: '14px'
     }
   }
-  theme_settings['google_maps'] = {
+  themeSettings['google_maps'] = {
     positions: 'top',
     width: 220,
     overlap: 0,
@@ -178,7 +186,7 @@ function beautytipsGetThemeSettings() {
     strokeWidth: 1,
     cssStyles: {color: 'black',}
   }
-  return theme_settings;
+  return themeSettings;
 }
 
 

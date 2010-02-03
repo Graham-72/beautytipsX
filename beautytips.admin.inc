@@ -8,12 +8,13 @@
 
 /**
  * Menu callback - beautytips admin settings form
- * TODO: Beautify this form so it's more usable adn better looking
+ * TODO: Beautify this form so it's more usable and better looking
  */
-function beautytips_admin() { 
+function beautytips_admin() {
+  drupal_add_css(drupal_get_path('module', 'beautytips') .'/css/beautytips.css');
   $form['beautytips_always_add'] = array(
     '#title' => t('Add beautytips js to every page'),
-    '#description' => t('This allows you to give the class \'beautytips\' to any element on a page and the title attribute will popup as a beautytip.'),
+    '#description' => t('This allows you to give the class \'beautytips\' to any element on a page and the title attribute will popup as a beautytip.<br /> i.e. <i> &lt;p class="beautytips" title="type the text you want beautytips to display here"&gt .....&lt/p&gt</i>'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('beautytips_always_add', 0),
     '#weight' => -1,
@@ -25,7 +26,29 @@ function beautytips_admin() {
     '#type' => 'textfield',
     '#default_value' => is_array($selectors) ? implode(", ", $selectors) : '',
     '#weight' => -1,
-  ); 
+  );
+  $form['beautytips_default_styles'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Styling Options',
+    '#collapsible' => TRUE,
+    '#collapsible' => FALSE,
+  );
+  $form['beautytips_default_styles']['beautytips_default_style'] = array(
+    '#type' => 'radios',
+    '#title' => t('Choose a default style'),
+    '#description' => t('Mouse over the radio buttons to see a preview.'),
+    '#prefix' => '<div id="beauty-default-styles">',
+    '#suffix' => '</div>',
+    '#options' => array(
+      'default' => t('default'),
+      'netflix' => t('Netflix'),
+      'facebook' => t('Facebook'),
+      'transparent' => t('Transparent with Big Text'),
+      'big_green' => t('Green with no border'),
+      'google_maps' => t('Google Maps'),
+    ),
+    '#default_value' => variable_get('beautytips_default_style', 'default'),
+  );  
   $style_options = array(
     'fill' => t('background color (string - html color)'), 
     'strokeWidth' => t('width of border (integer)'),
@@ -38,43 +61,31 @@ function beautytips_admin() {
     'shadowBlur' => t('Size of popup shadow (integer)'),
     'shadowColor' => t('Color of popup shadow (string - html color)'),
   ); 
-  $form['custom_styles'] = array(
+  $form['beautytips_default_styles']['custom_styles'] = array(
     '#type' => 'fieldset',
     '#title' => 'Custom Style Options',
-    '#description' => t('Set a custom style.  Note: These will override settings from the default style that is selected.  <br />Leave these empty unless you know what you are doing.<div id="beautytips-popup-changes" style="width: 30em"><p>Double Click here to view popup with custom changes</p></div>'),
+    '#description' => t('<b>Set a custom style.</b><br /> Note: These will use the default style that is selected as a base <br /> but will overide elements such as background color, border color etc.   <br /><i>Leave these empty unless you know what you are doing.</i><div id="beautytips-popup-changes"><div id="beauty-click-text"><p>Double Click here to view popup with custom changes</p></div></div>'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#prefix' => '<div id="beautytips-site-wide-popup" style="width: 30em"><p>Hover over to see the current site wide beautytips</p></div>',
+    '#prefix' => '<div id="beautytips-site-wide-popup"><div id="beauty-text"><p>Hover here to see the current site-wide beautytips</p></div></div>',
   );
   $custom_style = variable_get('beautytips_custom_style', NULL);
   foreach ($style_options as $option => $description) {
-    $form['custom_styles']['bt-options-' . $option] = array(
+    $form['beautytips_default_styles']['custom_styles']['bt-options-' . $option] = array(
       '#title' => $option,
       '#description' => $description,
       '#type' => 'textfield',
       '#default_value' => isset($custom_style[$option]) ? $custom_style[$option] : '',
     );
   }
-  $form['custom_styles']['bt-options-shadow'] = array(
+  $form['beautytips_default_styles']['custom_styles']['bt-options-shadow'] = array(
     '#title' => 'shadow',
     '#description' => t('Whether or not the popup has a shadow'),
     '#type' => 'checkbox',
     '#default_value' => isset($custom_style['shadow']) ? $custom_style['shadow'] : '',
   );
-  $form['beautytips_default_style'] = array(
-    '#type' => 'radios',
-    '#title' => t('Choose a default style'),
-    '#description' => t('Mouse over the radio buttons to see a preview.'),
-    '#options' => array(
-      'default' => t('default'),
-      'netflix' => t('Netflix'),
-      'facebook' => t('Facebook'),
-      'transparent' => t('Transparent with Big Text'),
-      'big_green' => t('Green with no border'),
-      'google_maps' => t('Google Maps'),
-    ),
-    '#default_value' => variable_get('beautytips_default_style', 'default'),
-  ); 
+  
+
   $form['#submit'][] = 'beautytips_admin_submit';
   
   $path = drupal_get_path('module', 'beautytips') .'/js/bt_admin_page.js';

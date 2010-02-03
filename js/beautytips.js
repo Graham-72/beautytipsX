@@ -1,3 +1,6 @@
+/**
+ * Defines the default beautytip and adds them to the content on the page
+ */ 
 Drupal.behaviors.beautytips = function() {
   jQuery.bt.options.closeWhenOthersOpen = true;
   beautytips_defaults = Drupal.settings.beautytips_defaults;
@@ -16,6 +19,8 @@ Drupal.behaviors.beautytips = function() {
       jQuery.bt.options[beautytips_defaults['list'][i]] = beautytips_defaults[beautytips_defaults['list'][i]];
     }
   }
+
+  // Add the the tooltips to the page
   for (var key in beautytips) {
     // Build array of options that were passed to beautytips_add_beautyips
     var bt_options = new Array();
@@ -25,6 +30,7 @@ Drupal.behaviors.beautytips = function() {
       }
     }
     if (beautytips[key]['cssSelect']) {
+      // Run any java script that needs to be run when the page loads
       if (Drupal.settings.beautytips[key]['contentSelector'] && Drupal.settings.beautytips[key]['preEval']) {
         $(Drupal.settings.beautytips[key]['cssSelect']).each(function() {
           eval(Drupal.settings.beautytips[key]['contentSelector']);
@@ -38,6 +44,11 @@ Drupal.behaviors.beautytips = function() {
       else if (beautytips[key]['ajaxPath']) {
         $(beautytips[key]['cssSelect']).each(function() {
           $(this).bt(bt_options);
+          if (beautytips[key]['ajaxDisableLink']) {
+            $(beautytips[key]['ajaxDisableLink']).click(function() {
+              return false;
+            });
+          }
         });
       }
       else { 
@@ -53,3 +64,4 @@ Drupal.behaviors.beautytips = function() {
     $(".beautytips").bt();
   }
 }
+

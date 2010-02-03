@@ -14,10 +14,10 @@
                                    ABOUT THE MODULE
     
   The Beautytips module provides ballon-help style tooltip for any page element. 
-  It integrates BeautyTips jQuery plugin by Jeff Robbins with Drupal.  This module provides 
-  an API for adding custom tooltips to your site.  It also has some built-in features allows
-  such as allowing an administrator to add tooltips to textfields and textareas.  It also 
-  supplies hover tips for Drupal help links and advanced help links.
+  It integrates BeautyTips jQuery plugin by Jeff Robbins with Drupal.  Currently, this 
+  module allows tooltips to appear with textfields and textareas.  It also supplies hover
+  tips for Drupal help links and advanced help links.  Most importantly, it allows developers
+  to add their own beautytips popups to their site without having to delve into jQuery.
   
   For information about the Beauty Tips jQuery plugin:
     http://www.lullabot.com/articles/announcing-beautytips-jquery-tooltip-plugin
@@ -59,11 +59,7 @@
         ex 3. 'ajaxPath' => 'demo.html',
         This will display that particular webpage within the tooltip balloon.
     
-        ex 4.  'ajaxPath' => '$(this).attr("href")',
-        This uses jQuery to find the url associated with the link that was selected with 
-        the css selector and displays it.
-    
-        ex 5. 'ajaxPath' => array(0 => '$(this).attr("href"), 1 => '#squeeze.clear-block p'),
+        ex 4. 'ajaxPath' => array('$(this).attr("href"), '#squeeze.clear-block p'),
         This does the same thing as ex. 4, except it only displays the css-selected section of 
         the page.
   
@@ -78,8 +74,8 @@
 
     $options['bt_drupal_help_page'] = array(
       'cssSelect' => '.help-items li a',
-      'ajaxPath' => array(0 => "$(this).attr('href')", 1 => '.clear-block p'),
-      'trigger' => array(0 => 'mouseover', 1 => 'click'),
+      'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
+      'trigger' => array('mouseover', 'click'),
       'width' => 350,
     );
     beautytips_add_beautytips($options);

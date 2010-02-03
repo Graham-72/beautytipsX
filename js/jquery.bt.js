@@ -343,7 +343,10 @@ jQuery.bt = {version: '0.9.5-rc1'};
         if (typeof content == 'object') {
           // if content is a DOM object (as opposed to text)
           // use a clone, rather than removing the original element
-          // and ensure that it's visible
+          // and ensure that it's visible 
+          if (content == null) {
+            return;
+          }
           var original = content;
           var clone = $(original).clone(true).show();
           // also store a reference to the original object in the clone data
@@ -719,6 +722,9 @@ jQuery.bt = {version: '0.9.5-rc1'};
       this.btOff = function() {
       
         var box = $(this).data('bt-box');
+        if (typeof box == 'undefined') {
+          return;
+        }
   
         // trigger preHide function
         // function receives the box element (the balloon wrapper div) as an argument
