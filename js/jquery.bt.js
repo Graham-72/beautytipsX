@@ -155,7 +155,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
         // $('#selector').btOn();
         // $('#selector').btOff();
       }
-      else if (opts.trigger.length > 1 && opts.trigger[0] != opts.trigger[1]) {
+      else if (opts.trigger.length > 1 && opts.trigger[0] != opts.trigger[1]) { 
         $(this)
           .bind(opts.trigger[0], function() {
             this.btOn();
@@ -185,7 +185,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
         if (typeof $(this).data('bt-box') == 'object') {
           // if there's already a popup, remove it before creating a new one.
           this.btOff();
-        }
+        } 
   
         // trigger preBuild function
         // preBuild has no argument since the box hasn't been built yet
@@ -715,7 +715,12 @@ jQuery.bt = {version: '0.9.5-rc1'};
         // trigger postShow function
         // function receives the box element (the balloon wrapper div) as an argument
         opts.postShow.apply(this, [$box[0]]);
-  
+
+        // Allow trigger btContentHover to turn off on tip on moueout of actual tip
+        currentDiv = this;
+        $(".bt-content").mouseout(function() {
+          $(currentDiv).trigger('btContentHover');
+        });
   
       }; // </ turnOn() >
   

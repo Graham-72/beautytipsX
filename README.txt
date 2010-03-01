@@ -40,7 +40,7 @@
 
     2.  Each beautytip will need a css(or jQuery) selector.  This is how the bt plugin 
         knows where to place the tooltip.
-      ex. 'cssSelect' => '.help-items li a'
+      ex. 'area' => '.help-items li a'
 
     3.  Each beautytip will need some text to display.  You can define what to display 
         in 3 different ways.
@@ -59,7 +59,11 @@
         ex 3. 'ajaxPath' => 'demo.html',
         This will display that particular webpage within the tooltip balloon.
     
-        ex 4. 'ajaxPath' => array('$(this).attr("href"), '#squeeze.clear-block p'),
+        ex 4.  'ajaxPath' => '$(this).attr("href")',
+        This uses jQuery to find the url associated with the link that was selected with 
+        the css selector and displays it.
+    
+        ex 5. 'ajaxPath' => array(0 => '$(this).attr("href"), 1 => '#squeeze.clear-block p'),
         This does the same thing as ex. 4, except it only displays the css-selected section of 
         the page.
   
@@ -73,9 +77,9 @@
     ex. Full options array and function call to add beautytips
 
     $options['bt_drupal_help_page'] = array(
-      'cssSelect' => '.help-items li a',
-      'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
-      'trigger' => array('mouseover', 'click'),
+      'area' => '.help-items li a',
+      'ajaxPath' => array(0 => "$(this).attr('href')", 1 => '.clear-block p'),
+      'trigger' => array(0 => 'mouseover', 1 => 'click'),
       'width' => 350,
     );
     beautytips_add_beautytips($options);
@@ -85,123 +89,136 @@
 Beautytips options and defaults (Copied and pasted from the jQuery.bt.js file)
 ******************************************************************************
 /**
-   * Defaults for the beauty tips
-   *
-   * Note this is a variable definition and not a function. So defaults can be
-   * written for an entire page by simply redefining attributes like so:
-   *
-   *   jQuery.bt.defaults.width = 400;
-   *
-   * This would make all Beauty Tips boxes 400px wide.
-   *
-   * Each of these options may also be overridden during
-   *
-   * Can be overriden globally or at time of call.
-   *
-   */
-  jQuery.bt.defaults = {
-    trigger:         'hover',                // trigger to show/hide tip
-                                             // use [on, off] to define separate on/off triggers
-                                             // also use space character to allow multiple  to trigger
-                                             // examples:
-                                             //   ['focus', 'blur'] // focus displays, blur hides
-                                             //   'dblclick'        // dblclick toggles on/off
-                                             //   ['focus mouseover', 'blur mouseout'] // multiple triggers
-                                             //   'now'             // shows/hides tip without event
-                                             //   'none'            // use $('#selector').btOn(); and ...btOff();
-                                             //   'hoverIntent'     // hover using hoverIntent plugin (settings below)
-                                             // note:
-                                             //   hoverIntent becomes default if available
-                                             
-    clickAnywhereToClose: true,              // clicking anywhere outside of the tip will close it 
-    closeWhenOthersOpen: false,              // tip will be closed before another opens - stop >= 2 tips being on
-                                             
-    width:            '200px',               // width of tooltip box
-                                             //   when combined with cssStyles: {width: 'auto'}, this becomes a max-width for the text
-    padding:          '10px',                // padding for content (get more fine grained with cssStyles)
-    spikeGirth:       10,                    // width of spike
-    spikeLength:      15,                    // length of spike
-    overlap:          0,                     // spike overlap (px) onto target (can cause problems with 'hover' trigger)
-    overlay:          false,                 // display overlay on target (use CSS to style) -- BUGGY!
-    killTitle:        true,                  // kill title tags to avoid double tooltips
+ * Defaults for the beauty tips
+ *
+ * Note this is a variable definition and not a function. So defaults can be
+ * written for an entire page by simply redefining attributes like so:
+ *
+ *   jQuery.bt.options.width = 400;
+ *
+ * Be sure to use *jQuery.bt.options* and not jQuery.bt.defaults when overriding
+ *
+ * This would make all Beauty Tips boxes 400px wide.
+ *
+ * Each of these options may also be overridden during
+ *
+ * Can be overriden globally or at time of call.
+ *
+ */
+jQuery.bt.defaults = {
+  trigger:         'hover',                // trigger to show/hide tip
+                                           // use [on, off] to define separate on/off triggers
+                                           // also use space character to allow multiple  to trigger
+                                           // examples:
+                                           //   ['focus', 'blur'] // focus displays, blur hides
+                                           //   'dblclick'        // dblclick toggles on/off
+                                           //   ['focus mouseover', 'blur mouseout'] // multiple triggers
+                                           //   'now'             // shows/hides tip without event
+                                           //   'none'            // use $('#selector').btOn(); and ...btOff();
+                                           //   'hoverIntent'     // hover using hoverIntent plugin (settings below)
+                                           // note:
+                                           //   hoverIntent becomes default if available
+                                           
+  clickAnywhereToClose: true,              // clicking anywhere outside of the tip will close it 
+  closeWhenOthersOpen: false,              // tip will be closed before another opens - stop >= 2 tips being on
+                                           
+  shrinkToFit:      false,                 // should short single-line content get a narrower balloon?
+  width:            '200px',               // width of tooltip box
   
-    textzIndex:       9999,                  // z-index for the text
-    boxzIndex:        9998,                  // z-index for the "talk" box (should always be less than textzIndex)
-    wrapperzIndex:    9997,
-    positions:        ['most'],              // preference of positions for tip (will use first with available space)
-                                             // possible values 'top', 'bottom', 'left', 'right' as an array in order of
-                                             // preference. Last value will be used if others don't have enough space.
-                                             // or use 'most' to use the area with the most space
-    fill:             "rgb(255, 255, 102)",  // fill color for the tooltip box, you can use any CSS-style color definition method
-                                             // http://www.w3.org/TR/css3-color/#numerical - not all methods have been tested
+  padding:          '10px',                // padding for content (get more fine grained with cssStyles)
+  spikeGirth:       10,                    // width of spike
+  spikeLength:      15,                    // length of spike
+  overlap:          0,                     // spike overlap (px) onto target (can cause problems with 'hover' trigger)
+  overlay:          false,                 // display overlay on target (use CSS to style) -- BUGGY!
+  killTitle:        true,                  // kill title tags to avoid double tooltips
+
+  textzIndex:       9999,                  // z-index for the text
+  boxzIndex:        9998,                  // z-index for the "talk" box (should always be less than textzIndex)
+  wrapperzIndex:    9997,
+  offsetParent:     null,                  // DOM node to append the tooltip into.
+                                           // Must be positioned relative or absolute. Can be selector or object
+  positions:        ['most'],              // preference of positions for tip (will use first with available space)
+                                           // possible values 'top', 'bottom', 'left', 'right' as an array in order of
+                                           // preference. Last value will be used if others don't have enough space.
+                                           // or use 'most' to use the area with the most space
+  fill:             "rgb(255, 255, 102)",  // fill color for the tooltip box, you can use any CSS-style color definition method
+                                           // http://www.w3.org/TR/css3-color/#numerical - not all methods have been tested
+  
+  windowMargin:     10,                    // space (px) to leave between text box and browser edge
+
+  strokeWidth:      1,                     // width of stroke around box, **set to 0 for no stroke**
+  strokeStyle:      "#000",                // color/alpha of stroke
+
+  cornerRadius:     5,                     // radius of corners (px), set to 0 for square corners
+  
+                    // following values are on a scale of 0 to 1 with .5 being centered
+  
+  centerPointX:     .5,                    // the spike extends from center of the target edge to this point
+  centerPointY:     .5,                    // defined by percentage horizontal (x) and vertical (y)
     
-    windowMargin:     10,                    // space (px) to leave between text box and browser edge
+  shadow:           false,                 // use drop shadow? (only displays in Safari and FF 3.1) - experimental
+  shadowOffsetX:    2,                     // shadow offset x (px)
+  shadowOffsetY:    2,                     // shadow offset y (px)
+  shadowBlur:       3,                     // shadow blur (px)
+  shadowColor:      "#000",                // shadow color/alpha
+  shadowOverlap:   false,                  // when shadows overlap the target element it can cause problem with hovering
+                                           // set this to true to overlap or set to a numeric value to define the amount of overlap
+  noShadowOpts:     {strokeStyle: '#999'},  // use this to define 'fall-back' options for browsers which don't support drop shadows
   
-    strokeWidth:      1,                     // width of stroke around box, **set to 0 for no stroke**
-    strokeStyle:      "#000",                // color/alpha of stroke
+  cssClass:         '',                    // CSS class to add to the box wrapper div (of the TIP)
+  cssStyles:        {},                    // styles to add the text box
+                                           //   example: {fontFamily: 'Georgia, Times, serif', fontWeight: 'bold'}
+                                               
+  activeClass:      'bt-active',           // class added to TARGET element when its BeautyTip is active
+
+  contentSelector:  "$(this).attr('title')", // if there is no content argument, use this selector to retrieve the title
+                                           // a function which returns the content may also be passed here
+
+  ajaxPath:         null,                  // if using ajax request for content, this contains url and (opt) selector
+                                           // this will override content and contentSelector
+                                           // examples (see jQuery load() function):
+                                           //   '/demo.html'
+                                           //   '/help/ajax/snip'
+                                           //   '/help/existing/full div#content'
+                                           
+                                           // ajaxPath can also be defined as an array
+                                           // in which case, the first value will be parsed as a jQuery selector
+                                           // the result of which will be used as the ajaxPath
+                                           // the second (optional) value is the content selector as above
+                                           // examples:
+                                           //    ["$(this).attr('href')", 'div#content']
+                                           //    ["$(this).parents('.wrapper').find('.title').attr('href')"]
+                                           //    ["$('#some-element').val()"]
+                                           
+  ajaxError:        '<strong>ERROR:</strong> <em>%error</em>',
+                                           // error text, use "%error" to insert error from server
+  ajaxLoading:     '<blink>Loading...</blink>',  // yes folks, it's the blink tag!
+  ajaxData:         {},                    // key/value pairs
+  ajaxType:         'GET',                 // 'GET' or 'POST'
+  ajaxCache:        true,                  // cache ajax results and do not send request to same url multiple times
+  ajaxOpts:         {},                    // any other ajax options - timeout, passwords, processing functions, etc...
+                                           // see http://docs.jquery.com/Ajax/jQuery.ajax#options
+                                    
+  preBuild:         function(){},          // function to run before popup is built
+  preShow:          function(box){},       // function to run before popup is displayed
+  showTip:          function(box){
+                      $(box).show();
+                    },
+  postShow:         function(box){},       // function to run after popup is built and displayed
   
-    cornerRadius:     5,                     // radius of corners (px), set to 0 for square corners
-    
-                      // following values are on a scale of 0 to 1 with .5 being centered
-    
-    centerPointX:     .5,                    // the spike extends from center of the target edge to this point
-    centerPointY:     .5,                    // defined by percentage horizontal (x) and vertical (y)
-      
-    shadow:           false,                 // use drop shadow? (only displays in Safari and FF 3.1) - experimental
-    shadowOffsetX:    2,                     // shadow offset x (px)
-    shadowOffsetY:    2,                     // shadow offset y (px)
-    shadowBlur:       3,                     // shadow blur (px)
-    shadowColor:      "#000",                // shadow color/alpha
-    shadowOverlap:   false,                  // when shadows overlap the target element it can cause problem with hovering
-                                             // set this to true to overlap or set to a numeric value to define the amount of overlap
-    noShadowOpts:     {strokeStyle: '#999'},  // use this to define 'fall-back' options for browsers which don't support drop shadows
+  preHide:          function(box){},       // function to run before popup is removed
+  hideTip:          function(box, callback) {
+                      $(box).hide();
+                      callback();   // you MUST call "callback" at the end of your animations
+                    },
+  postHide:         function(){},          // function to run after popup is removed
   
-    animate:          false,                 // animate show/hide of box - EXPERIMENTAL (buggy in IE)
-    distance:         15,                    // distance of animation movement (px)
-    easing:           'swing',               // animation easing
-    speed:            200,                   // speed (ms) of animation
-  
-    cssClass:         '',                    // CSS class to add to the box wrapper div (of the TIP)
-    cssStyles:        {},                    // styles to add the text box
-                                             //   example: {fontFamily: 'Georgia, Times, serif', fontWeight: 'bold'}
-                                                 
-    activeClass:      'bt-active',           // class added to TARGET element when its BeautyTip is active
-  
-    contentSelector:  "$(this).attr('title')", // if there is no content argument, use this selector to retrieve the title
-  
-    ajaxPath:         null,                  // if using ajax request for content, this contains url and (opt) selector
-                                             // this will override content and contentSelector
-                                             // examples (see jQuery load() function):
-                                             //   '/demo.html'
-                                             //   '/help/ajax/snip'
-                                             //   '/help/existing/full div#content'
-                                             
-                                             // ajaxPath can also be defined as an array
-                                             // in which case, the first value will be parsed as a jQuery selector
-                                             // the result of which will be used as the ajaxPath
-                                             // the second (optional) value is the content selector as above
-                                             // examples:
-                                             //    ["$(this).attr('href')", 'div#content']
-                                             //    ["$(this).parents('.wrapper').find('.title').attr('href')"]
-                                             //    ["$('#some-element').val()"]
-                                             
-    ajaxError:        '<strong>ERROR:</strong> <em>%error</em>',
-                                             // error text, use "%error" to insert error from server
-    ajaxLoading:     '<blink>Loading...</blink>',  // yes folks, it's the blink tag!
-    ajaxData:         {},                    // key/value pairs
-    ajaxType:         'GET',                 // 'GET' or 'POST'
-    ajaxCache:        true,                  // cache ajax results and do not send request to same url multiple times
-    ajaxOpts:         {},                    // any other ajax options - timeout, passwords, processing functions, etc...
-                                             // see http://docs.jquery.com/Ajax/jQuery.ajax#options
-                                      
-    preShow:          function(){return;},       // function to run before popup is built and displayed
-    postShow:         function(){return;},       // function to run after popup is built and displayed
-    preHide:          function(){return;},       // function to run before popup is removed
-    postHide:         function(){return;},       // function to run after popup is removed
-    
-    hoverIntentOpts:  {                          // options for hoverIntent (if installed)
-                        interval: 300,           // http://cherne.net/brian/resources/jquery.hoverIntent.html
-                        timeout: 500
-                      }
-                                                 
-  }; // </ jQuery.bt.defaults >
+  hoverIntentOpts:  {                          // options for hoverIntent (if installed)
+                      interval: 300,           // http://cherne.net/brian/resources/jquery.hoverIntent.html
+                      timeout: 500
+                    }
+                                               
+}; // </ jQuery.bt.defaults >
+
+  **Note: If you need to use 'preBuild', 'preShow', 'showTip', 'postShow', 'preHide', 'hideTip', or 'postHide', 
+  then it's recommended that you add your beautytips in javascript instead of in using this module's api.
