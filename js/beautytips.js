@@ -1,24 +1,11 @@
+// $Id$
+
 /**
  * Defines the default beautytip and adds them to the content on the page
  */ 
 Drupal.behaviors.beautytips = function() {
   jQuery.bt.options.closeWhenOthersOpen = true;
-  beautytips_defaults = Drupal.settings.beautytips_defaults;
   beautytips = Drupal.settings.beautytips;
-
-  // Set default css settings as chosen in BeautyTips settings
-  if ( beautytips_defaults['css_list'].length > 0) {
-    jQuery.bt.options.cssStyles = {};
-    for (var j = 0; j < beautytips_defaults['css_list'].length; j++) {
-      jQuery.bt.options.cssStyles[beautytips_defaults['css_list'][0]] = beautytips_defaults['cssStyles'][beautytips_defaults['css_list'][0]];
-    }
-  }
-  // Defaults based on which style was chosen in BeautyTips Settings
-  if (beautytips_defaults['list'].length > 0) {
-    for (var i = 0; i < beautytips_defaults['list'].length; i++) {
-      jQuery.bt.options[beautytips_defaults['list'][i]] = beautytips_defaults[beautytips_defaults['list'][i]];
-    }
-  }
 
   // Add the the tooltips to the page
   for (var key in beautytips) {
@@ -64,4 +51,5 @@ Drupal.behaviors.beautytips = function() {
     $(".beautytips").bt();
   }
 }
+
 

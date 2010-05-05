@@ -8,7 +8,6 @@
 
 /**
  * Menu callback - beautytips admin settings form
- * TODO: Beautify this form so it's more usable and better looking
  */
 function beautytips_admin() {
 
@@ -33,21 +32,30 @@ function beautytips_admin() {
     '#collapsible' => TRUE,
     '#collapsible' => FALSE,
   );
+  $styles = beautytips_get_styles(TRUE);
+  if (count($styles)) {
+    unset($styles['default']);
+    foreach ($styles as $name => $style) {
+      // TODO: Add style to $style_options (Needs a title of some sort, or description)
+      $bt_style_options[$name]['cssSelect'] = '#edit-beautytips-default-style-' . $name;
+      $bt_style_options[$name]['text'] = 'Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.';
+      $bt_style_options[$name]['width'] = isset($style['width']) ? $style['width'] : '200px';
+      $bt_style_options[$name]['style'] = $name;
+      $style_options[$name] = $name;
+    }
+  }
+  $bt_style_options['default_hover'] = array(
+    'cssSelect' => '#beautytips-site-wide-popup',
+    'text' => 'Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi fermentum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien.',
+    'positions' => array('right'),
+  );
   $form['beautytips_default_styles']['beautytips_default_style'] = array(
     '#type' => 'radios',
     '#title' => t('Choose a default style'),
     '#description' => t('Mouse over the radio buttons to see a preview.'),
     '#prefix' => '<div id="beauty-default-styles">',
     '#suffix' => '</div>',
-    '#options' => array(
-      'default' => t('default'),
-      'netflix' => t('Netflix'),
-      'facebook' => t('Facebook'),
-      'transparent' => t('Transparent with Big Text'),
-      'big_green' => t('Green with no border'),
-      'google_maps' => t('Google Maps'),
-      'hulu' => t('Hulu'),
-    ),
+    '#options' => $style_options,
     '#default_value' => variable_get('beautytips_default_style', 'default'),
   );  
   $style_options = array(
@@ -118,7 +126,7 @@ function beautytips_admin() {
   drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
   drupal_add_css($path .'/css/beautytips.css');
   drupal_add_css($path .'/css/beautytips_admin.css');
-  beautytips_add_beautytips();
+  beautytips_add_beautytips($bt_style_options);
   drupal_add_js($path . '/js/bt_admin_page.js');
 
   if (module_exists('beautytips_ui')) {
@@ -150,7 +158,7 @@ function beautytips_admin_submit($form, $form_state) {
     }
 
     // Store the defaults - they will be passed to javascript
-    $style = beautytips_get_default_style($values['beautytips_default_style']);
+    $style = beautytips_get_style($values['beautytips_default_style']);
     if (count($custom_style)) {
       foreach ($custom_style as $option => $value) {
         if ($option == 'shadow') {
@@ -176,6 +184,7 @@ function beautytips_admin_submit($form, $form_state) {
     variable_set('beautytips_defaults', $style);
     variable_set('beautytips_custom_style', $custom_style);
     variable_set('beautytips_default_style', $values['beautytips_default_style']);
+    cache_clear_all('beautytips:beautytips-styles', 'cache');
 
     // Store array of selectors that bt will be added to on every page
     $selectors = explode(",", $values['beautytips_added_selectors_string']);
@@ -184,129 +193,10 @@ function beautytips_admin_submit($form, $form_state) {
       foreach ($selectors as $key => $selector) {
         $selectors[$key] = trim($selector);
       }
-    } 
+    }
     variable_set('beautytips_added_selectors_array', $selectors);
   }
   if (module_exists('beautytips_ui')) {
     beautytips_ui_admin_submit($form, $form_state);
   }
 }
-
-/**
- *  See jQuery.bt.js for descriptions of defaults
- */
-function beautytips_get_default_style($style) {
-  $bt_defaults = array();
-  // The default style isn't necessarily needed here.
-  switch ($style) {
-    case 'default':
-      $bt_defaults = array(
-        'cssStyles' => array(),
-      );
-      break;
-      
-    case 'netflix':
-      $bt_defaults = array(
-        'positions' => array(0 => 'right', 1 => 'left'),
-        'fill' => '#FFF',
-        'padding' => 5,
-        'shadow' => TRUE,
-        'shadowBlur' => 12,
-        'strokeStyle' => '#B9090B',
-        'spikeLength' => 50,
-        'spikeGirth' => 60,
-        'cornerRadius' => 10,
-        'centerPointY' => .1,
-        'overlap' => -8,
-        'cssStyles' => array(
-          'fontSize' => '12px',
-          'fontFamily' => 'arial,helvetica,sans-serif',
-        ),
-      );
-      break;
-
-    case 'facebook':
-      $bt_defaults = array(
-        'fill' => '#F7F7F7',
-        'padding' => 8,
-        'strokeStyle' => '#B7B7B7',
-        'cornerRadius' => 0,
-        'cssStyles' => array(
-          'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
-          'fontSize' => '11px',
-        ),
-      );
-      break;
-      
-    case 'transparent':
-      $bt_defaults = array(
-        'fill' => 'rgba(0, 0, 0, .8)',
-        'padding' => 20,
-        'strokeStyle' => '#CC0',
-        'strokeWidth' => 3,
-        'spikeLength' => 40,
-        'spikeGirth' => 40,
-        'cornerRadius' => 40,
-        'cssStyles' => array(
-          'color' => '#FFF',
-          'fontWeight' => 'bold',
-        ),
-      );
-      break;
-      
-      case 'big_green':
-        $bt_defaults = array(
-          'fill' => '#00FF4E',
-          'padding' => 20,
-          'strokeWidth' => 0,
-          'spikeLength' => 40,
-          'spikeGirth' => 40,
-          'cornerRadius' => 15,
-          'cssStyles' => array(
-            'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
-            'fontSize' => '14px',
-          ),
-        );
-        break;
-        
-        case 'google_maps':
-          $bt_defaults = array(
-            'positions' => array(0 => 'top', 1 => 'bottom'),
-            'fill' => '#FFF',
-            'padding' => 15,
-            'strokeStyle' => '#ABABAB',
-            'strokeWidth' => 1,
-            'spikeLength' => 65,
-            'spikeGirth' => 40,
-            'cornerRadius' => 25,
-            'centerPointX' => .9,
-            'cssStyles' => array(),
-          );
-          break;
-
-        case 'hulu':
-          $bt_defaults = array(
-            'fill' => '#F4F4F4',
-            'strokeStyle' => '#666666', 
-            'spikeLength' => 20,
-            'spikeGirth' => 10,
-            'width' => 350,
-            'overlap' => 0,
-            'centerPointY' => 1,
-            'cornerRadius' => 0, 
-            'cssStyles' => array(
-              'fontFamily' => '"Lucida Grande",Helvetica,Arial,Verdana,sans-serif', 
-              'fontSize' => '12px',
-              'padding' => '10px 14px'
-            ),
-            'shadow' => TRUE,
-            'shadowColor' => 'rgba(0,0,0,.5)',
-            'shadowBlur' => 8,
-            'shadowOffsetX' => 4,
-            'shadowOffsetY' => 4,
-          );
-          break;
-  }   
-  return $bt_defaults;
-}
-
