@@ -3,3 +3,4 @@
 name = BeautyTips API
 description = API for implementing jQuery beautyTips tooltip plugin
 core = 6.x
+package = User interface
