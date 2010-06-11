@@ -21,6 +21,7 @@ function beautytips_init() {
         }
       }
     }
+    $options['.beautytips']['cssSelect'] = '.beautytips';
     beautytips_add_beautytips($options);
   }
 }

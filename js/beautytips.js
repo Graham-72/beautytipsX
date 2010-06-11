@@ -46,10 +46,6 @@ Drupal.behaviors.beautytips = function() {
     }
     bt_options.length = 0;
   }
-  // Add basic beautytips to all elements of class 'beautytips'
-  if (Drupal.settings.beautytips_always_add) {
-    $(".beautytips").bt();
-  }
 }
 
 
