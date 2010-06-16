@@ -86,6 +86,7 @@ function beautytipsSetupDefaultOptions(themeSettings) {
 
   for (var key in themeSettings) {
     if (key == 'cssStyles') {
+      options['cssStyles'] = new Array();
       for (var option in themeSettings['cssStyles']) {
         options['cssStyles'][option] = themeSettings['cssStyles'][option];
       }
@@ -104,4 +105,3 @@ function beautytipsGetThemeSettings() {
   themeSettings = Drupal.settings.beautytips; 
   return themeSettings;
 }
-

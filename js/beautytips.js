@@ -18,9 +18,9 @@ Drupal.behaviors.beautytips = function() {
     }
     if (beautytips[key]['cssSelect']) {
       // Run any java script that needs to be run when the page loads
-      if (Drupal.settings.beautytips[key]['contentSelector'] && Drupal.settings.beautytips[key]['preEval']) {
-        $(Drupal.settings.beautytips[key]['cssSelect']).each(function() {
-          eval(Drupal.settings.beautytips[key]['contentSelector']);
+      if (beautytips[key]['contentSelector'] && beautytips[key]['preEval']) {
+        $(beautytips[key]['cssSelect']).each(function() {
+          eval(beautytips[key]['contentSelector']);
         });
       }
       if (beautytips[key]['text']) {
@@ -47,5 +47,3 @@ Drupal.behaviors.beautytips = function() {
     bt_options.length = 0;
   }
 }
-
-

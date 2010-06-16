@@ -36,10 +36,9 @@ function beautytips_admin() {
   if (count($styles)) {
     unset($styles['default']);
     foreach ($styles as $name => $style) {
-      // TODO: Add style to $style_options (Needs a title of some sort, or description)
       $bt_style_options[$name]['cssSelect'] = '#edit-beautytips-default-style-' . $name;
-      $bt_style_options[$name]['text'] = 'Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.';
-      $bt_style_options[$name]['width'] = isset($style['width']) ? $style['width'] : '200px';
+      $bt_style_options[$name]['text'] = 'Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.  Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.  Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.';
+      $bt_style_options[$name]['width'] = isset($style['width']) ? $style['width'] : '300px';
       $bt_style_options[$name]['style'] = $name;
       $style_options[$name] = $name;
     }
@@ -137,9 +136,55 @@ function beautytips_admin() {
 }
 
 /**
+ * Validation for beautytips settings form
+ */
+function beautytips_admin_validate($form, &$form_state) {
+  $values = $form_state['values'];
+  $integer_fields = array('bt-options-box-strokeWidth', 'bt-options-box-cornerRadius', 'bt-options-box-spikeGirth', 'bt-options-box-spikeLength', 'bt-options-box-shadowBlur'); 
+  $pixel_fields = array('bt-options-box-width', 'bt-options-box-padding', 'bt-options-css-fontSize');
+  $color_fields = array('bt-options-box-fill', 'bt-options-css-color', 'bt-options-box-shadowColor'); 
+  $sanitize_strings = array('bt-options-cssClass', 'bt-options-css-fontFamily', 'bt-options-css-fontWeight');
+
+  foreach ($integer_fields as $name) {
+    if ($values[$name]) {
+      if (!is_numeric($values[$name])) {
+        form_set_error($name, t('You need to enter a numeric value for <em>@name</em>', array('@name' => str_replace(array('bt-options-box-', 'bt-options-css-'), '', $name))));
+      }
+      else {
+        $form_state['values'][$name] = round($values[$name]);  
+      }
+    }
+  }
+
+  foreach ($pixel_fields as $name) {
+    if ($values[$name]) {
+      $value = str_replace(array('px', ' '), '', $values[$name]);
+      if (!is_numeric($value) || (!$value && $value != 0)) {
+        form_set_error($name, t('You need to enter a numeric value for <em>@name</em>, followed by <em>px</em>', array('@name' => str_replace(array('bt-options-box-', 'bt-options-css-'), '', $name))));
+      }
+      else {
+        $form_state['values'][$name] = round($values[$name]) . 'px';
+      }
+    }
+  }
+
+  foreach ($color_fields as $name) {
+    if ($values[$name]) {
+      $form_state['values'][$name] = check_plain($values[$name]);
+    }
+  }
+
+  foreach ($sanitize_strings as $name) {
+    if ($values[$name]) {
+      $form_state['values'][$name] = check_plain($values[$name]);
+    }
+  }
+}
+
+/**
  * Submit function for beautytips settings form
  */
-function beautytips_admin_submit($form, $form_state) {
+function beautytips_admin_submit($form, &$form_state) {
   $values = $form_state['values'];
   if (count($values)) {
     $custom_style = array();
@@ -187,7 +232,7 @@ function beautytips_admin_submit($form, $form_state) {
     cache_clear_all('beautytips:beautytips-styles', 'cache');
 
     // Store array of selectors that bt will be added to on every page
-    $selectors = explode(",", $values['beautytips_added_selectors_string']);
+    $selectors = explode(",", check_plain($values['beautytips_added_selectors_string']));
     $test = serialize($selectors);
     if (count($selectors)) {
       foreach ($selectors as $key => $selector) {

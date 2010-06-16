@@ -9,7 +9,7 @@
 /**
  * Implementation of hook_init().
  */
-function beautytips_init() { 
+function beautytips_init() {
   if (variable_get('beautytips_always_add', 0)) {
     $selectors = array();
     $options = array();
@@ -76,7 +76,6 @@ function beautytips_add_beautytips($options = NULL) {
         }
       }
     }
-
     if ($added && !empty($settings['beautytips'])) {
       drupal_add_js($settings, 'setting');
     }
@@ -91,15 +90,9 @@ function beautytips_add_beautytips($options = NULL) {
     if (count(file_scan_directory($expath, 'excanvas.js', array('.', '..', 'CVS'), 0, FALSE))) {
       drupal_add_js($expath . '/excanvas.compiled.js');
     }
-    if (module_exists('jquery_plugin')) {
-      jquery_plugin_add('bt');
-    }
-    else {
-      drupal_add_js($path . '/js/jquery.bt.min.js');
-    }
+    drupal_add_js($path . '/js/jquery.bt.min.js');
     drupal_add_js($path . '/js/beautytips.js');
 
-    $settings['beautytips_always_add'] = variable_get('beautytips_always_add', 0);
     drupal_add_js($settings, 'setting');
     $added = TRUE;
   }

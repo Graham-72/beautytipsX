@@ -30,7 +30,6 @@ function beautytips_textinput_admin_info() {
     '#title' => 'Enter the form id(s) to use for text popup beautytips',
     '#description' => t('You need to use Drupal php syntax like page_node_form'),
     '#default_value' => variable_get('beautytips_form_id', ''),
-    '#field_suffix' => '<div class="wishywashy"></div>',
   );
   $form['beautytips_text']['form_id']['beautytips_show_form'] = array(
     '#type' => 'checkbox',
@@ -77,7 +76,7 @@ function beautytips_textinput_form_change(&$form, $form_state, $form_id) {
       );
       $options['bt_text_area'] = array(
         'cssSelect' => 'textarea.form-textarea',
-        'trigger' => array(0 => 'focus', 1 => 'blur'),
+        'trigger' => array(0 => 'focus', 1 => 'dblclick'),
         'contentSelector' => "$(this).parents('.form-item').find('.description').hide().html()",
         'width' => '275px',
         'positions' => array(0 => variable_get('beautytips_position', 'bottom')),
@@ -87,6 +86,7 @@ function beautytips_textinput_form_change(&$form, $form_state, $form_id) {
     }
   }  
 }
+
 /**
  * Menu callback.  Turns off the display of form-ids.
  */
