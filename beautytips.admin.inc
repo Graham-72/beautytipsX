@@ -55,7 +55,7 @@ function beautytips_admin() {
     '#prefix' => '<div id="beauty-default-styles">',
     '#suffix' => '</div>',
     '#options' => $style_options,
-    '#default_value' => variable_get('beautytips_default_style', 'default'),
+    '#default_value' => variable_get('beautytips_default_style', 'plain'),
   );  
   $style_options = array(
     'fill' => t('background color (string - html color)'), 

@@ -77,7 +77,7 @@
     ex. Full options array and function call to add beautytips
 
     $options['bt_drupal_help_page'] = array(
-      'area' => '.help-items li a',
+      'cssSelect' => '.help-items li a',
       'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
       'trigger' => array('mouseover', 'click'),
       'width' => 350,

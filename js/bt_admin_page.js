@@ -46,7 +46,6 @@ Drupal.behaviors.beautytipsAdmin = function() {
     currentTheme = $("input[name='beautytips_default_style']:checked").val();
   });
 
-  // TODO: This is still in the experimental stage - the drop shadow is still an issue
   $("#beautytips-popup-changes").click( function() {
     options = beautytipsSetupDefaultOptions(themeSettings[currentTheme]); 
     // General options
