@@ -7,20 +7,6 @@
  */
 
 /**
- * Implementation of hook_install().
- */
-function beautytips_manager_install() {
-  drupal_install_schema('beautytips_manager');
-}
-
-/**
- * Implementation of hook_uninstall().
- */
-function beautytips_manager_uninstall() {
-  drupal_uninstall_schema('beautytips_manager');
-}
-
-/**
  * Implementation of hook_schema().
  */
 function beautytips_manager_schema() {
@@ -45,7 +31,6 @@ function beautytips_manager_schema() {
       ),
       'content' => array(
         'type' => 'text',
-        'default' => '',
         'description' => t('The content that will be displayed. Depends on content type.'),
       ),
       'trigger_on' => array(
@@ -96,7 +81,6 @@ function beautytips_manager_schema() {
       'pages' => array(
         'type' => 'text',
         'not null' => TRUE,
-        'default' => '',
         'description' => t('Contains a list of paths on which to include/exclude the beautytip, depending on "visibility" setting.'),
       ),
     ),

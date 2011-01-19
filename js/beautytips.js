@@ -11,6 +11,7 @@
       // Add the the tooltips to the page
       for (var key in beautytips) {
         // Build array of options that were passed to beautytips_add_beautyips
+        // TODO: Add in processed check
         var bt_options = new Array();
         if (beautytips[key]['list']) {
           for ( var k = 0; k < beautytips[key]['list'].length; k++) {
