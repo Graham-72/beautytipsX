@@ -25,8 +25,22 @@
   
   To see a demonstration:
     http://www.lullabot.com/files/bt/bt-latest/DEMO/index.html
+
+  ------------------------------------------------------------------------------------
+                         Add beautytips js to every page
+  ------------------------------------------------------------------------------------
+  
+  If you enable the option 'Add beautytips js to every page', then, anything with the 
+  class 'beautytips' will automatically have a popup which displays the 'title' attribute 
+  of the element.  If there is nothing in the title attribute, then there will be no popup.
+  
+  With this enabled, you can also define custom elements which will be given a beautytip.
+  For example, you can set it up so that anything on any page with the id 'example'
+  will have a popup.  Again, the content of the beauty will be pulled from the
+  element's title attribute.
+
   --------------------------------------------------------------------------------------
-                                         API
+                                 Custom Beautytips
   --------------------------------------------------------------------------------------
     Beautytips has an API so that you can create your own beautytips and add them into 
   any place on your site.  To do this, you will need to set up an array of options and 
@@ -83,8 +97,32 @@
       'width' => 350,
     );
     beautytips_add_beautytips($options);
+    
   ------------------------------------------------------------------------------------
-
+                                     HOOK
+  ------------------------------------------------------------------------------------
+  
+  hook_define_beautytips_styles() - allows a module to define its own base beautytips
+  styles.  (See beautytips_api.module for an example). This allows easier use of 
+  beautytips_add_beautytips by allowing a style to be indicated instead of having to 
+  define all of the same options everytime.
+  example of adding beautytips with the style option:
+    $options['bt_drupal_help_page'] = array(
+      'cssSelect' => '.help-items li a',
+      'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
+      'trigger' => array('mouseover', 'click'),
+      'width' => 350,
+      'style' => 'hulu',
+    );
+    beautytips_add_beautytips($options);
+    
+  This example will add beautytips to the help page using the 'hulu' style
+  as defined in the implementation of this hook in beautytips_api.module.
+  
+  Any defined style will also show up on the beautytips settings page and
+  can be set as the default style.
+  
+  
 ******************************************************************************
 Beautytips options and defaults (Copied and pasted from the jQuery.bt.js file)
 ******************************************************************************
@@ -222,3 +260,4 @@ jQuery.bt.defaults = {
 
   **Note: If you need to use 'preBuild', 'preShow', 'showTip', 'postShow', 'preHide', 'hideTip', or 'postHide', 
   then it's recommended that you add your beautytips in javascript instead of in using this module's api.
+  

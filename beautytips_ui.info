@@ -3,5 +3,5 @@
 name = BeautyTips UI
 description = Adds settings menu and contributed beautytip popups
 core = 6.x
+package = User interface 
 dependencies[] = beautytips
-package = User interface

@@ -10,7 +10,7 @@
  */
 
 function beautytips_ui_admin_settings(&$form) {
-  $items = beautytips_ui_include_invoke('beautytips', 'admin_info', $args = array());
+  $items = beautytips_ui_include_invoke('beautytips', 'admin_info', $args = NULL);
   if (is_array($items)) {
     foreach ($items as $form_item) {
       if (count($form_item)) {
@@ -40,7 +40,7 @@ function beautytips_ui_admin_submit($form, $form_state) {
 function beautytips_ui_menu() {
   $items = array(); 
 
-  $menu_items = beautytips_ui_include_invoke('beautytips', 'menu_items', $args = array());
+  $menu_items = beautytips_ui_include_invoke('beautytips', 'menu_items', $args = NULL);
   if (is_array($menu_items)) {
     foreach ($menu_items as $menu_item) {
       if (is_array($menu_item)) {

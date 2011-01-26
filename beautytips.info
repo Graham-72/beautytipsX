@@ -2,5 +2,10 @@
 
 name = BeautyTips API
 description = API for implementing jQuery beautyTips tooltip plugin
-core = 6.x
-package = User interface
+core = 7.x
+package = User interface 
+files[] = beautytips.module
+files[] = beautytips.admin.inc
+files[] = beautytips.install
+configure = admin/config/user-interface/beautytips
+

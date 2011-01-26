@@ -30,8 +30,9 @@ function beautytips_init() {
  * Implementation of hook_menu().
  */
 function beautytips_menu() {
-  $items['admin/settings/beautytips'] = array(
+  $items['admin/config/user-interface/beautytips'] = array(
     'title' => 'BeautyTips',
+    'description' => 'Configure settings related to the Beautytips module.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('beautytips_admin'),
     'access arguments' => array('administer site configuration'),
@@ -216,3 +217,4 @@ function beautytips_define_beautytips_styles() {
   );
   return $styles;
 }
+

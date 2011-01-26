@@ -75,7 +75,7 @@ function beautytips_admin() {
     '#description' => t('<b>Set a custom style.</b><br /> Note: These will use the default style that is selected as a base <br /> but will overide elements such as background color, border color etc.   <br /><i>Leave these empty unless you know what you are doing.</i><div id="beautytips-popup-changes"><div id="beauty-click-text"><p>Double Click here to view popup with custom changes</p></div></div>'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#attributes' => array('class' => 'bt-custom-styles'),
+    '#attributes' => array('class' => array('bt-custom-styles')),
     '#prefix' => '<div id="beautytips-site-wide-popup"><div id="beauty-text"><p>Hover here to see the current site-wide beautytips</p></div></div>',
   );
   $custom_style = variable_get('beautytips_custom_style', NULL);
@@ -93,7 +93,7 @@ function beautytips_admin() {
     '#description' => t('Whether or not the popup has a shadow'),
     '#type' => 'radios',
     '#options' => array('default' => t('Default'), 'shadow' => t('Shadow On'), 'no_shadow' => t('Shadow Off')),
-    '#attributes' => array('class' => 'beautytips-options-shadow'),
+    '#attributes' => array('class' => array('beautytips-options-shadow')),
     '#default_value' => isset($custom_style['shadow']) ? $custom_style['shadow'] : 'default',
   );
   $form['beautytips_default_styles']['custom_styles']['bt-options-cssClass'] = array(
@@ -107,7 +107,7 @@ function beautytips_admin() {
     '#type' => 'fieldset',
     '#title' => t('Font Styling'),
     '#description' => t('Enter css options for changing the font style'),
-    '#attributes' => array('class' => 'beautytips-css-styling'),
+    '#attributes' => array('class' => array('beautytips-css-styling')),
     '#collapsible' => FALSE,
   );
   foreach ($css_style_options as $option) {
@@ -245,3 +245,4 @@ function beautytips_admin_submit($form, &$form_state) {
     beautytips_ui_admin_submit($form, $form_state);
   }
 }
+
