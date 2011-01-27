@@ -88,7 +88,7 @@ function beautytips_add_beautytips($options = NULL) {
     
     //for IE add this
     $expath = $path . '/other_libs/excanvas_r3';
-    if (count(file_scan_directory($expath, 'excanvas.js', array('.', '..', 'CVS'), 0, FALSE))) {
+    if (count(file_scan_directory($expath, '/excanvas.compiled.js/', $options = array('recurse' => FALSE)))) {
       drupal_add_js($expath . '/excanvas.compiled.js');
     }
     drupal_add_js($path . '/js/jquery.bt.min.js');
@@ -184,7 +184,7 @@ function beautytips_define_beautytips_styles() {
     ),
   );       
   $styles['google-maps'] = array(
-    'positions' => array(0 => 'top', 1 => 'bottom'),
+    'positions' => array('top', 'bottom'),
     'fill' => '#FFF',
     'padding' => 15,
     'strokeStyle' => '#ABABAB',
