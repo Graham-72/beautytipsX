@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * jQuery to show on beautytips admin settings page

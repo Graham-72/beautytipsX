@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function beautytips_textinput_admin_info() {
   $form['beautytips_text'] = array(

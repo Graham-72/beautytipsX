@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Defines the default beautytip and adds them to the content on the page

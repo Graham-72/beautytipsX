@@ -1,4 +1,3 @@
-; $Id$
 
 name = BeautyTips API
 description = API for implementing jQuery beautyTips tooltip plugin
