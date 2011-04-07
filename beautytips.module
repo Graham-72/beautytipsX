@@ -87,7 +87,7 @@ function beautytips_add_beautytips($options = NULL) {
     
     //for IE add this
     $expath = $path . '/other_libs/excanvas_r3';
-    if (count(file_scan_directory($expath, '/excanvas.compiled.js/', $options = array('recurse' => FALSE)))) {
+    if (file_exists($expath. '/excanvas.compiled.js')) {
       drupal_add_js($expath . '/excanvas.compiled.js');
     }
     drupal_add_js($path . '/js/jquery.bt.min.js');

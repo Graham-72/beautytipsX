@@ -96,17 +96,16 @@ function beautytips_ui_include_invoke($module, $hook, $args) {
  * @return
  *   An array of all loaded includes. (w/o appended .inc)
  */
- // TODO: This may need to change - only unclude the items needed - maybe
 function beautytips_ui_include_list() {
-  static $list = array();
-  $dir = drupal_get_path('module', 'beautytips') .'/includes';
-  $files = file_scan_directory($dir, '/\.inc$/', $options = array('recurse' => FALSE));
-  foreach ($files as $file) {
-    module_load_include('inc', 'beautytips', 'includes/'.$file->name);
-    $list[$file->filename] = $file->name;
+  $files = array(
+    'drupal_help.inc' => 'drupal_help',
+    'textinput.inc' => 'textinput',
+  );
+  foreach ($files as $file => $name) {
+    module_load_include('inc', 'beautytips', 'includes/'. $name);
   }
 
-  return $list;
+  return $files;
 }
 
 /**
