@@ -40,6 +40,42 @@ function beautytips_menu() {
   return $items;
 }
 
+ /**
+ * Implements hook_library
+ */
+function beautytips_library() {
+  $libraries = array();
+  $path = drupal_get_path('module', 'beautytips');
+  $expath = $path .'/other_libs/excanvas_r3';
+
+  $libraries['beautytips-jquery'] = array(
+    'title' => 'BeautyTips Jquery Plugin',
+    'website' => 'http://plugins.jquery.com/project/bt',
+    'version' => '0.9.5-rc1',
+    'js' => array($path .'/js/jquery.bt.min.js' => array()),
+  );
+  $libraries['beautytips-module'] = array(
+    'title' => 'BeautyTips Module',
+    'website' => 'http://drupal.org/project/beautytips',
+    'version' => '7.x-2.x',
+    'js' => array($path .'/js/beautytips.js' => array()),
+    'dependencies' => array(
+      array('beautytips', 'beautytips-jquery'),
+    ),
+  );
+  if (file_exists($expath. '/excanvas.compiled.js')) {
+    $libraries['excanvas_r3'] = array(
+      'title' => 'ExplorerCanvas',
+      'website' => 'http://excanvas.sourceforge.net/',
+      'version' => 'r3',
+      'js' => array($expath .'/excanvas.compiled.js' => array()),
+    );
+  }
+  
+  return $libraries;
+}
+
+
 /**
  * This is the API.  Call this function to add beautytips.
  *
@@ -81,18 +117,11 @@ function beautytips_add_beautytips($options = NULL) {
     }
   }
   
-  // Add beautytips jQuery plugin
   if (!$added) {
-    $path = drupal_get_path('module', 'beautytips');
-    
-    //for IE add this
-    $expath = $path . '/other_libs/excanvas_r3';
-    if (file_exists($expath. '/excanvas.compiled.js')) {
-      drupal_add_js($expath . '/excanvas.compiled.js');
-    }
-    drupal_add_js($path . '/js/jquery.bt.min.js');
-    drupal_add_js($path . '/js/beautytips.js');
-
+    // Add beautytips jQuery plugin and module js.
+    drupal_add_library('beautytips', 'beautytips-module');
+    // Add this for ie compatibility
+    drupal_add_library('beautytips', 'excanvas_r3');
     drupal_add_js($settings, 'setting');
     $added = TRUE;
   }
