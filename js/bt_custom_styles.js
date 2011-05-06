@@ -8,7 +8,7 @@
       var btPopup = $("#beautytips-popup-changes");
       var popupText = "Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi ferm entum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien.";
       var currentTheme = $("input[name='beautytips_default_style']:checked").val(); 
-      btPopup.bt(popupText, {trigger: 'none', clickAnywhereToClose: false, closeWhenOthersOpen: false, positions: 'bottom'});
+      btPopup.bt(popupText, {trigger: 'none', clickAnywhereToClose: false, closeWhenOthersOpen: false, positions: 'bottom', cssClass: 'beautytips-fixed-beautytips'});
       btPopup.btOn();
 
       // Add the color picker to certain textfields
@@ -36,7 +36,7 @@
         btPopup.btOff(); 
         options = beautytipsSetupDefaultOptions(themeSettings[currentTheme]); 
         // General options
-        $(".bt-custom-styles").children('.form-item:not(.beautytips-css-styling)').each( function() {
+        $(".bt-custom-styles .fieldset-wrapper").children('.form-item:not(.beautytips-css-styling)').each( function() {
           var name = $(this).find('input').attr('name'); 
           var optionName = name.replace("custom_styles[", "");
           optionName = optionName.replace("]", "");
@@ -53,7 +53,7 @@
           }
         });
         // css options
-        $(".beautytips-css-styling").children('.form-item').each( function() {
+        $(".beautytips-css-styling .fieldset-wrapper").children('.form-item').each( function() {
           var newValue = $(this).find('input').val();
           var name = $(this).find('input').attr('name'); 
           var optionName = name.replace("custom_styles[css-styles][", "");
@@ -65,8 +65,10 @@
             options['cssStyles'][optionName] = newValue;
           }
         });
+        options['cssClass'] = 'beautytips-fixed-beautytips';
         $("#beautytips-popup-changes").bt(popupText, options);
         btPopup.btOn(); 
+        $('.beautytips-fixed-beautytips').css('position', 'fixed');
       }
       beautytipsStyleTip();
 

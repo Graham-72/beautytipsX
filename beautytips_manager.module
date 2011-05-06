@@ -52,7 +52,7 @@ function beautytips_manager_menu() {
   $items['admin/config/user-interface/beautytips/custom-styles/%/delete'] = array(
     'title' => 'BeautyTips Manager Delete',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('beautytips_manager_delete_confirm_form', 5),
+    'page arguments' => array('beautytips_manager_delete_style_confirm_form', 5),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
   );
@@ -377,9 +377,29 @@ function beautytips_manager_delete_confirm_form($form, &$form_state, $id) {
 function beautytips_manager_delete_confirm_form_submit($form, &$form_state) {
   beautytips_manager_delete_custom_tip($form_state['values']['id']);
   cache_clear_all('beautytips:beautytips-ui-custom-tips', 'cache');
-  $form_state['redirect'] = 'admin/config/user-interface/beautytips/manager';
+  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-tips';
 }
 
+/**
+ * Confirm form for deleting a custom beautytip style.
+ */
+function beautytips_manager_delete_style_confirm_form($form, &$form_state, $id) {
+  $style = beautytips_manager_get_custom_style($id);
+  $form['id'] = array(
+    '#type' => 'value',
+    '#value' => $id,
+  );
+  $question = t('Are you sure you want to the beautytip stlye %style?', array('%style' => $style->name));
+  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/manager');
+}
+
+/**
+ * Submit callback for beautytips delete confirm form.
+ */
+function beautytips_manager_delete_style_confirm_form_submit($form, &$form_state) {
+  beautytips_manager_delete_custom_style($form_state['values']['id']);
+  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-styles';
+}
 
 /**
  * Delete a singular custom beautytip.
@@ -546,7 +566,7 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
     '#type' => 'fieldset',
     '#title' => t('Custom Style Options'),
     '#description' => t('<div id="beautytips-popup-changes"><div id="beauty-click-text"><p></p></div></div>'),
-    '#attributes' => array('class' => 'bt-custom-styles'),
+    '#attributes' => array('class' => array('bt-custom-styles')),
     '#tree' => TRUE,
   );
   foreach ($style_info as $option => $description) {
@@ -562,7 +582,7 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
     '#description' => t('Whether or not the popup has a shadow'),
     '#type' => 'radios',
     '#options' => array('default' => t('Default'), 'shadow' => t('Shadow On'), 'no_shadow' => t('Shadow Off')),
-    '#attributes' => array('class' => 'beautytips-options-shadow'),
+    '#attributes' => array('class' => array('beautytips-options-shadow')),
     '#default_value' => isset($style->shadow) ? $style->shadow : 'default',
   );
   $form['custom_styles']['cssClass'] = array(
@@ -576,7 +596,7 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
     '#type' => 'fieldset',
     '#title' => t('Font Styling'),
     '#description' => t('Enter css options for changing the font style'),
-    '#attributes' => array('class' => 'beautytips-css-styling'),
+    '#attributes' => array('class' => array('beautytips-css-styling')),
     '#collapsible' => FALSE,
   );
   foreach ($css_style_info as $option) {
@@ -712,8 +732,9 @@ function beautytips_manager_get_custom_styles() {
  * Grab a custom style from the database.
  */
 function beautytips_manager_get_custom_style($id) {
-  $result = db_query("SELECT * FROM {beautytips_custom_styles} WHERE id = :id", array(':id' => $id));
-  return $result;
+  $sql = "SELECT * FROM {beautytips_custom_styles} WHERE id = :id";
+  $result = db_query($sql, array(':id' => $id));
+  return $result->fetchObject();
 }
 
 /**
@@ -750,3 +771,4 @@ function beautytips_manager_define_beautytips_styles() {
   }
   return $styles;
 }
+

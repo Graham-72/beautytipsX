@@ -23,8 +23,8 @@
   background: transparent url(../images/blue-bubble.png) no-repeat scroll 0 0;
   float: right;
   height: 160px;
-  width: 241px;
-  margin-right: 254px;
+  width: 321px;
+  margin-right: 702px;
 }
 #beautytips-popup-changes #beauty-click-text {
   color: #EAEAEA;
@@ -34,4 +34,8 @@
   padding-top: 37px;
   width: 140px;
   font-size: .8em;
+}
+
+.beautytips-fixed-beautytips {
+  position: fixed;
 }
