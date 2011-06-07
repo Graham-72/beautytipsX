@@ -193,7 +193,11 @@ function beautytips_admin_submit($form, &$form_state) {
         $option = str_replace('bt-options-box-', '', $option);
         $custom_style[$option] = $value;
       }
-      if (strpos($option, 'bt-options-css-') === 0) {
+      else if ($option == 'bt-options-cssClass') {
+        $option = str_replace('bt-options-', '', $option);
+        $custom_style[$option] = $value;
+      }
+      else if (strpos($option, 'bt-options-css-') === 0) {
         $option = str_replace('bt-options-css-', '', $option);
         if ($value) {
           $css_style[$option] = $value;
