@@ -58,7 +58,7 @@ function beautytips_library() {
     'title' => 'BeautyTips Module',
     'website' => 'http://drupal.org/project/beautytips',
     'version' => '7.x-2.x',
-    'js' => array($path .'/js/beautytips.js' => array()),
+    'js' => array($path .'/js/beautytips.min.js' => array()),
     'dependencies' => array(
       array('beautytips', 'beautytips-jquery'),
     ),
