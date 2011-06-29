@@ -74,6 +74,9 @@ function beautytips_manager_init() {
   $tips = beautytips_manager_get_custom_tips();
   if (count($tips)) {
     foreach ($tips as $tip) {
+      if (!$tip->enabled) {
+        continue;
+      }
       // Match path if necessary
       if ($tip->pages) {
         $path = drupal_get_path_alias($_GET['q']);
@@ -116,7 +119,7 @@ function beautytips_manager_perm() {
 function beautytips_manager_tips_manager_page() {
   $rows = array();
   $empty = '';
-  $header = array(t('Element'), t('Style'), t('Visibility'), t('Pages'), t('operations') ,'');
+  $header = array(t('Element'), t('Style'), t('Status'), t('Visibility'), t('Pages'), t('operations') ,'');
   $tips = beautytips_manager_get_custom_tips();
   if (count($tips)) {
     $visibility = array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.'));
@@ -125,6 +128,7 @@ function beautytips_manager_tips_manager_page() {
       $pages = ($tip->pages != substr($tip->pages, 0, 40)) ? substr($tip->pages, 0, 40) . '...' : substr($tip->pages, 0, 40);
       $rows[$tip->id]['element'] = check_plain($tip->element);
       $rows[$tip->id]['style'] = $tip->style;
+      $rows[$tip->id]['enabled'] = $tip->enabled ? t('Enabled') : t('Disabled');
       $rows[$tip->id]['visibility'] = $visibility[$tip->visibility];
       $rows[$tip->id]['pages'] = $pages;
       $rows[$tip->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-tips/$tip->id/edit");
@@ -143,24 +147,24 @@ function beautytips_manager_tips_manager_page() {
 function beautytips_manager_styles_manager_page() {
   $rows = array();
   $empty = '';
-  $header = array(t('Name'), t('Example'), t('operations'));
+  $header = array(t('Name'), t('operations'), '');
   $styles = beautytips_manager_get_custom_styles();
   if (count($styles)) {
     $visibility = array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.'));
     foreach ($styles as $style) {
       $name = check_plain($style->name);
       unset($style->name);
-      $rows[$style->id]['name'] = $name;
-      $rows[$style->id]['testing'] = '<span class="bt-style-' . $name . '">' . t('Test Me!') . '</span>';
+      $rows[$style->id]['name'] = '<span class="bt-style-' . $name . '">' . $name . '</span>';
+      // TODO: Add position relative to td on manager page.
       $rows[$style->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-styles/$style->id/edit");
       $rows[$style->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-styles/$style->id/delete");
 
       $options = array(
         'cssSelect' => 'td .bt-style-' . $name,
-        'text' => t('<h2>Default Text</h2><p>Nam magna enim, accumsan eu, blandit sed, blandit a, eros.</p><p>Cras ultricies placerat eros.</p><p>Nulla facilisi. Nam magna enim, accumsan eu, blandit sed, blandit a, eros.</p>'),
+        'text' => t('<h2>Default Text</h2><p>Nam magna enim, accumsan eu, blandit sed, blandit a, eros.  Nam ante nulla, interdum vel, tristique ac, condimentum non, tellus.</p><p>Nulla facilisi. Nam magna enim, accumsan eu, blandit sed, blandit a, eros.</p>'),
         'trigger' => 'hover',
         'style' => $name,
-        'shrinkToFit' => TRUE,
+        //'shrinkToFit' => TRUE,
       );
       beautytips_add_beautytips(array($name => $options));
     }
@@ -195,6 +199,11 @@ function beautytips_manager_admin($form, &$form_state, $id = NULL) {
     '#type' => 'textfield',
     '#title' => t('Element'),
     '#default_value' => is_object($tip) ? $tip->element : '',
+  );
+  $form['tip']['enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enabled'),
+    '#default_value' => is_object($tip) ? $tip->enabled : TRUE,
   );
   $content_options = array('attribute' => 'attribute', 'text' => 'text', 'ajax' => 'ajax');
   $description = t('Content to display in the beautytip.  The data entered here depends on the Content Type.');
@@ -610,7 +619,7 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
   $path = drupal_get_path('module', 'beautytips');
   drupal_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
   drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
-  drupal_add_css($path .'/css/beautytips.css');
+  //drupal_add_css($path .'/css/beautytips.css');
   beautytips_add_beautytips();
   drupal_add_js($path . '/js/bt_custom_styles.js');
   $form['save'] = array(

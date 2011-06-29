@@ -9,7 +9,7 @@
  * Menu callback - beautytips admin settings form
  */
 function beautytips_admin() {
-
+  
   $form['beautytips_always_add'] = array(
     '#title' => t('Add beautytips js to every page'),
     '#description' => t('This allows you to give the class \'beautytips\' to any element on a page and the title attribute will popup as a beautytip.<br /> i.e. <i> &lt;p class="beautytips" title="type the text you want beautytips to display here"&gt .....&lt/p&gt</i>'),
@@ -123,7 +123,6 @@ function beautytips_admin() {
   drupal_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
   drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
   drupal_add_css($path .'/css/beautytips.css');
-  drupal_add_css($path .'/css/beautytips_admin.css');
   beautytips_add_beautytips($bt_style_options);
   drupal_add_js($path . '/js/bt_admin_page.js');
 
