@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function beautytips_init() {
   if (variable_get('beautytips_always_add', 0)) {
@@ -26,7 +26,7 @@ function beautytips_init() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function beautytips_menu() {
   $items['admin/config/user-interface/beautytips'] = array(
@@ -41,7 +41,7 @@ function beautytips_menu() {
 }
 
  /**
- * Implements hook_library
+ * Implements hook_library().
  */
 function beautytips_library() {
   $libraries = array();
@@ -153,7 +153,7 @@ function beautytips_get_style($style = 'default') {
 }
 
 /**
- * Implementation of hook_define_beautytips_styles().
+ * Implements hook_define_beautytips_styles().
  */
 function beautytips_define_beautytips_styles() {
   $styles['default'] = variable_get('beautytips_defaults', array());

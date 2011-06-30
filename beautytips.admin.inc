@@ -29,7 +29,7 @@ function beautytips_admin() {
     '#type' => 'fieldset',
     '#title' => 'Styling Options',
     '#collapsible' => TRUE,
-    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
   );
   $styles = beautytips_get_styles(TRUE);
   if (count($styles)) {
@@ -86,7 +86,6 @@ function beautytips_admin() {
       '#default_value' => isset($custom_style[$option]) ? $custom_style[$option] : '',
     );
   }
-  // TODO: make this a radio (default, shadow, no-shadow)
   $form['beautytips_default_styles']['custom_styles']['bt-options-box-shadow'] = array(
     '#title' => 'shadow',
     '#description' => t('Whether or not the popup has a shadow'),
