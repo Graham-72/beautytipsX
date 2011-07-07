@@ -19,7 +19,7 @@ function beautytips_manager_menu() {
   $items['admin/config/user-interface/beautytips/custom-tips/%/edit'] = array(
     'title' => 'BeautyTips Custom-Tip Edit',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('beautytips_manager_admin', 5),
+    'page arguments' => array('beautytips_manager_custom_tips_form', 5),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
@@ -35,7 +35,7 @@ function beautytips_manager_menu() {
   $items['admin/config/user-interface/beautytips/custom-tips/add'] = array(
     'title' => 'BeautyTips Custom-Tip Add',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('beautytips_manager_admin'),
+    'page arguments' => array('beautytips_manager_custom_tips_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_LOCAL_ACTION,
