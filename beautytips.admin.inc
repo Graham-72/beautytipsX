@@ -25,6 +25,12 @@ function beautytips_admin() {
     '#default_value' => is_array($selectors) ? implode(", ", $selectors) : '',
     '#weight' => -1,
   );
+  $form['beautytips_ltr'] = array(
+    '#title' => t('Support Left to Right display'),
+    '#description' => t('Only check this if this is an ltr site.  This adds css to support it.'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('beautytips_ltr', 0),
+  );
   $form['beautytips_default_styles'] = array(
     '#type' => 'fieldset',
     '#title' => 'Styling Options',

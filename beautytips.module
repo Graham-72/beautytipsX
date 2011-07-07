@@ -71,6 +71,16 @@ function beautytips_library() {
       'js' => array($expath .'/excanvas.compiled.js' => array()),
     );
   }
+
+  $libraries['beautytips-ltr'] = array(
+    'title' => 'BeautyTips Module LTR support',
+    'website' => 'http://drupal.org/project/beautytips',
+    'version' => '7.x-2.x',
+    'css' => array($path .'/css/beautytips-ltr.css' => array()),
+    'dependencies' => array(
+      array('beautytips', 'beautytips-jquery'),
+    ),
+  );
   
   return $libraries;
 }
@@ -124,6 +134,9 @@ function beautytips_add_beautytips($options = NULL) {
     // Add this for ie compatibility
     drupal_add_library('beautytips', 'excanvas_r3');
     drupal_add_js($settings, 'setting');
+    if (variable_get('beautytips_ltr', FALSE)) {
+      drupal_add_library('beautytips', 'beautytips-ltr');
+    }
     $added = TRUE;
   }
 }
