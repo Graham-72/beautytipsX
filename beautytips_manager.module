@@ -328,6 +328,7 @@ function beautytips_manager_define_beautytips_styles() {
   $style_map = beautytips_manager_style_mapping();
   $style_options = array_flip($style_map['options']); 
   $css_style_options = array_flip($style_map['css_options']);
+
   if (count($custom_styles)) {
     foreach ($custom_styles as $id => $style) {
       $options = array();
@@ -339,16 +340,16 @@ function beautytips_manager_define_beautytips_styles() {
             }
           }
           else if (!is_null($value) && $value != '') {
-            $options[$style_options[$key]] = $value;
+            $options[$style_options[$key]] = check_plain($value);
           }
         }
         else if (isset($css_style_options[$key])) {
           if (!is_null($value) && $value != '') {
-            $options['cssStyles'][$css_style_options[$key]] = $value;
+            $options['cssStyles'][$css_style_options[$key]] = check_plain($value);
           }
         }
       }
-      $styles[$style->name] = $options; 
+      $styles[$style->name] = $options;
     }
   }
   return $styles;

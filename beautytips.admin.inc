@@ -53,6 +53,7 @@ function beautytips_admin() {
     'text' => 'Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi fermentum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien.',
     'positions' => array('right'),
   );
+  // TODO: Determine what to do if default style has been removed.
   $form['beautytips_default_styles']['beautytips_default_style'] = array(
     '#type' => 'radios',
     '#title' => t('Choose a default style'),
@@ -61,7 +62,7 @@ function beautytips_admin() {
     '#suffix' => '</div>',
     '#options' => $style_options,
     '#default_value' => variable_get('beautytips_default_style', 'plain'),
-  );  
+  );
   $style_options = array(
     'fill' => t('background color (string - html color)'), 
     'strokeWidth' => t('width of border (integer)'),
@@ -161,25 +162,11 @@ function beautytips_admin_validate($form, &$form_state) {
 
   foreach ($pixel_fields as $name) {
     if ($values[$name]) {
-      $value = str_replace(array('px', ' '), '', $values[$name]);
-      if (!is_numeric($value) || (!$value && $value != 0)) {
+      $unit = substr($values[$name], -2, 2);
+      $value = str_replace(array('px', ' ', 'em'), '', $values[$name]);
+      if (!is_numeric($value) || (!$value && $value != 0) || !in_array($unit, array('px', 'em'))) {
         form_set_error($name, t('You need to enter a numeric value for <em>@name</em>, followed by <em>px</em>', array('@name' => str_replace(array('bt-options-box-', 'bt-options-css-'), '', $name))));
       }
-      else {
-        $form_state['values'][$name] = round($values[$name]) . 'px';
-      }
-    }
-  }
-
-  foreach ($color_fields as $name) {
-    if ($values[$name]) {
-      $form_state['values'][$name] = check_plain($values[$name]);
-    }
-  }
-
-  foreach ($sanitize_strings as $name) {
-    if ($values[$name]) {
-      $form_state['values'][$name] = check_plain($values[$name]);
     }
   }
 }
@@ -239,7 +226,7 @@ function beautytips_admin_submit($form, &$form_state) {
     cache_clear_all('beautytips:beautytips-styles', 'cache');
 
     // Store array of selectors that bt will be added to on every page
-    $selectors = explode(",", check_plain($values['beautytips_added_selectors_string']));
+    $selectors = explode(",", $values['beautytips_added_selectors_string']);
     $test = serialize($selectors);
     if (count($selectors)) {
       foreach ($selectors as $key => $selector) {

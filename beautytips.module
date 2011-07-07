@@ -117,12 +117,15 @@ function beautytips_add_beautytips($options = NULL) {
         $settings['beautytips'][$beautytip] = array_merge(beautytips_get_style($style), $content);
         $keys_no_add = array('cssSelect', 'style', 'list', 'text', 'preEval', 'ajaxDisableLink');
         foreach ($settings['beautytips'][$beautytip] as $key => $value) {
+          // Ensure that numeric options are not passed as strings.
+          $settings['beautytips'][$beautytip][$key] = is_numeric($value) ? (int) $value : $value;
           if (!in_array($key, $keys_no_add)) {
             $settings['beautytips'][$beautytip]['list'][] = $key;
           }
         }
       }
     }
+
     if ($added && !empty($settings['beautytips'])) {
       drupal_add_js($settings, 'setting');
     }
@@ -170,9 +173,21 @@ function beautytips_get_style($style = 'default') {
  */
 function beautytips_define_beautytips_styles() {
   $styles['default'] = variable_get('beautytips_defaults', array());
-  $styles['plain'] = array(
-   //'cssStyles' => array(),
-  );
+  // Cleanup any problems with defaults.
+  if (count($styles['default'])) {
+    foreach ($styles['default'] as &$value) {
+      if (!is_array($value)) {
+        $value = check_plain($value);
+      }
+      else if (count($value)) {
+        foreach ($value as &$sub_value) {
+          $sub_value = check_plain($sub_value);
+        }
+      }
+    } 
+  }
+
+  $styles['plain'] = array();
   $styles['netflix'] = array(
     'positions' => array('right', 'left'),
     'fill' => '#FFF',

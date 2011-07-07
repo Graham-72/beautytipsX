@@ -13,7 +13,7 @@
 
       
       // Add the color picker to certain textfields
-      $('#edit-custom-styles-fill, #edit-custom-styles-strokestyle, #edit-custom-styles-shadowcolor').ColorPicker({
+      $('#edit-custom-styles-fill, #edit-custom-styles-strokestyle, #edit-custom-styles-css-styles-color').ColorPicker({
         onSubmit: function(hsb, hex, rgb, el) {
           $(el).val('#' + hex);
           $(el).ColorPickerHide();

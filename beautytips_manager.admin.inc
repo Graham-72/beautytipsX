@@ -357,12 +357,41 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
  * Validation callback on beautytips_manager_custom_styles_form.
  */
 function beautytips_manager_custom_styles_form_validate($form, &$form_state) {
-  if (empty($form_state['values']['name'])) {
+  $values = $form_state['values'];
+  if (empty($values['name'])) {
     form_set_error('name', t('You must name this custom style.'));
   }
-  if (preg_match('/[^a-zA-Z0-9_]/', $form_state['values']['name'])) {
+  if (preg_match('/[^a-zA-Z0-9_]/', $values['name'])) {
     form_set_error('name', t('Style name must be alphanumeric or underscores only.'));
   }
+
+  $integer_fields = array('strokeWidth' => 'style', 'cornerRadius' => 'style', 'spikeGirth' => 'style', 'spikeLength' => 'style', 'shadowBlur' => 'style'); 
+  $pixel_fields = array('width' => 'style', 'padding' =>'style', 'fontSize' => 'css');
+
+  // Validate fields that expect a number
+  foreach ($integer_fields as $name => $type) {
+    $value = $type == 'css' ? $values['custom_styles']['css-styles'][$name] : $values['custom_styles'][$name];
+    if ($value) {
+      if (!ctype_digit($value)) {
+        $error_element = $type == 'css' ? 'custom_styles][css-styles][' . $name : 'custom_styles][' . $name;
+        form_set_error($error_element, t('You need to enter an integer value for <em>@name</em>', array('@name' => $name)));
+      }
+    }
+  }
+
+  // Validate fields that expect a number and unit
+  foreach ($pixel_fields as $name => $type) {
+    $value = $type == 'css' ? $values['custom_styles']['css-styles'][$name] : $values['custom_styles'][$name];
+    if ($value) {
+      $unit = substr($value, -2, 2);
+      $value = str_replace(array('px', ' ', 'em'), '', $value);
+      if (!is_numeric($value) || (!$value && $value != 0) || !in_array($unit, array('px', 'em'))) {
+        $error_element = $type == 'css' ? 'custom_styles][css-styles][' . $name : 'custom_styles][' . $name;
+        form_set_error($error_element, t('You need to enter a numeric value for <em>@name</em>, followed by <em>px</em> or <em>em</em>', array('@name' => $name)));
+      }
+    }
+  }
+
 }
 
 /**
