@@ -47,9 +47,13 @@ function beautytips_manager_styles_manager_page() {
       $name = check_plain($style->name);
       unset($style->name);
       $rows[$style->id]['name'] = '<span class="bt-style-' . $name . '">' . $name . '</span>';
-      // TODO: Add position relative to td on manager page.
       $rows[$style->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-styles/$style->id/edit");
-      $rows[$style->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-styles/$style->id/delete");
+      if ($name != variable_get('beautytips_default_style', 'plain')) {
+        $rows[$style->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-styles/$style->id/delete");
+      }
+      else {
+        $rows[$style->id]['delete'] = t('Default style');
+      }
 
       $options = array(
         'cssSelect' => 'td .bt-style-' . $name,
@@ -90,6 +94,7 @@ function beautytips_manager_custom_tips_form($form, &$form_state, $id = NULL) {
   $form['tip']['element'] = array(
     '#type' => 'textfield',
     '#title' => t('Element'),
+    '#required' => TRUE,
     '#default_value' => is_object($tip) ? $tip->element : '',
   );
   $form['tip']['enabled'] = array(
@@ -436,7 +441,7 @@ function beautytips_manager_delete_tip_confirm_form($form, &$form_state, $id) {
     '#value' => $id,
   );
   $question = t('Are you sure you want to the beautytip applied to element %element?', array('%element' => $tip->element));
-  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/manager');
+  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/custom-tips');
 }
 
 /**
@@ -449,6 +454,19 @@ function beautytips_manager_delete_tip_confirm_form_submit($form, &$form_state) 
 }
 
 /**
+ * Page callback for style deletion form. 
+ */
+function beautytips_manager_delete_style_page($id) {
+  $style = beautytips_manager_get_custom_style($id);
+  if ($style->name == variable_get('beautytips_default_style', 'plain')) {
+    return t('You cannot delete this style because is set as the default style.  You may change this <a href="@link">here</a>.', array('@link' => '/admin/config/user-interface/beautytips'));
+  }
+
+  return drupal_get_form('beautytips_manager_delete_style_confirm_form', $id);
+  
+}
+
+/**
  * Confirm form for deleting a custom beautytip style.
  */
 function beautytips_manager_delete_style_confirm_form($form, &$form_state, $id) {
@@ -458,7 +476,7 @@ function beautytips_manager_delete_style_confirm_form($form, &$form_state, $id) 
     '#value' => $id,
   );
   $question = t('Are you sure you want to the beautytip stlye %style?', array('%style' => $style->name));
-  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/manager');
+  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/custom-styles');
 }
 
 /**

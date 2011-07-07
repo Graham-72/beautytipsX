@@ -57,8 +57,8 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-styles/%/delete'] = array(
     'title' => 'BeautyTips Manager Delete',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('beautytips_manager_delete_style_confirm_form', 5),
+    'page callback' => 'beautytips_manager_delete_style_page',
+    'page arguments' => array(5),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
