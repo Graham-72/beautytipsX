@@ -213,10 +213,8 @@ function beautytips_manager_schema() {
 function beautytips_manager_update_7000() {
   $ret = array();
 
-  // MAke sure this field doesn't already exist.
-  $sql = "SHOW COLUMNS FROM {beautytips_custom_tips} LIKE 'enabled'";
-  $field = db_query($sql)->fetchObject();
-  if (is_object($field)) {
+  // Make sure this field doesn't already exist.
+  if (db_field_exists('beautytips_custom_tips', 'enabled')) {
     return $ret;
   }
 
