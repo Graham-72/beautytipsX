@@ -275,7 +275,7 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
     $style_options = $style_map['options'];
     $css_style_options = $style_map['css_options'];
   }
-  // TODO: Make bubble scroll with page to see changes.
+
   $form = array();
   $form['name'] = array(
     '#type' => 'textfield',
@@ -346,9 +346,9 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
   }
 
   $path = drupal_get_path('module', 'beautytips');
+  // TODO: This could be in a library
   drupal_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
   drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
-  //drupal_add_css($path .'/css/beautytips.css');
   beautytips_add_beautytips();
   drupal_add_js($path . '/js/bt_custom_styles.js');
   $form['save'] = array(
