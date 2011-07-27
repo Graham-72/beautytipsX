@@ -115,7 +115,7 @@ function beautytips_add_beautytips($options = NULL) {
         $style = isset($content['style']) ? $content['style'] : 'default';
         unset($content['style']);
         $settings['beautytips'][$beautytip] = array_merge(beautytips_get_style($style), $content);
-        $keys_no_add = array('cssSelect', 'style', 'list', 'text', 'preEval', 'ajaxDisableLink');
+        $keys_no_add = array('cssSelect', 'style', 'list', 'text', 'preEval', 'ajaxDisableLink', 'animate');
         foreach ($settings['beautytips'][$beautytip] as $key => $value) {
           // Ensure that numeric options are not passed as strings.
           $settings['beautytips'][$beautytip][$key] = is_numeric($value) ? (int) $value : $value;
