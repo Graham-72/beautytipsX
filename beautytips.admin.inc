@@ -41,7 +41,7 @@ function beautytips_admin() {
   if (count($styles)) {
     unset($styles['default']);
     foreach ($styles as $name => $style) {
-      $bt_style_options[$name]['cssSelect'] = '#edit-beautytips-default-style-' . $name;
+      $bt_style_options[$name]['cssSelect'] = '#edit-beautytips-default-style-' . str_replace('_', '-', $name);
       $bt_style_options[$name]['text'] = 'Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.  Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.  Aenean risus purus, pharetra in, blandit quis, gravida a, turpis.';
       $bt_style_options[$name]['width'] = isset($style['width']) ? $style['width'] : '300px';
       $bt_style_options[$name]['style'] = $name;

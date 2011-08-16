@@ -217,6 +217,7 @@ function beautytips_manager_build_beautytip($tip) {
     'style' => $tip->style,
     'trigger' => $trigger,
     'shrinkToFit' => (boolean) $tip->shrink,
+    'ajaxDisableLink' => (boolean) $tip->disable_link,
   );
   if ($tip->animation_on) {
     $options['animate']['on'] = $tip->animation_on;

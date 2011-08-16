@@ -126,7 +126,7 @@ function beautytips_manager_custom_tips_form($form, &$form_state, $id = NULL) {
   $form['tip']['content'] = array(
     '#type' => 'textarea',
     '#title' => t('Content to Display'),
-    '#description' => theme('item_list', $types),
+    '#description' => theme('item_list', array('items' => $types)),
     '#default_value' => is_object($tip) ? $tip->content : '',
   );
   $triggers = beautytips_manager_get_triggers();
@@ -145,6 +145,14 @@ function beautytips_manager_custom_tips_form($form, &$form_state, $id = NULL) {
     '#suffix' => '</div>',
     '#default_value' => is_object($tip) ? $tip->trigger_off : 0,
   );
+
+  $form['tip']['disable_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable Link Click'),
+    '#description' => t('If you have chosen ajax as the type of content, and you would like to prevent the link from working, then check this box.'),
+    '#default_value' => is_object($tip) ? $tip->disable_link : 0,
+  );
+
   $styles = beautytips_get_styles();
   foreach ($styles as $key => $style) {
     $style_options[$key] = $key;
@@ -258,7 +266,7 @@ function beautytips_manager_custom_tips_form_submit($form, &$form_state) {
   }
   ksort($positions);
   $tip['positions'] = (count($positions)) ? implode(',', $positions) : '';
-  
+
   beautytips_manager_save_custom_tip($tip);
   cache_clear_all('beautytips:beautytips-ui-custom-tips', 'cache');
   $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-tips';
