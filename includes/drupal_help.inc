@@ -94,7 +94,7 @@ function theme_beautytips_drupal_help_more_help_link($url) {
  *   - 'title' to display the topic's title
  *   - any other text to display the text. Be sure to t() it!
  */
-function theme_beautytips_advanced_help_topic($module, $topic, $type = 'icon') { 
+function theme_beautytips_advanced_help_topic(&$variables) {
   // Add bt to advanced-help links
   $options['bt_advanced_help'] = array(
     'cssSelect' => 'a.advanced-help-link',
@@ -103,6 +103,6 @@ function theme_beautytips_advanced_help_topic($module, $topic, $type = 'icon') {
     'width' => 380,
   );
   beautytips_add_beautytips($options);
-  return theme_advanced_help_topic($module, $topic, $type);
+  return theme_advanced_help_topic($variables);
 }
 
