@@ -93,16 +93,16 @@ function beautytips_library() {
  */
 function beautytips_add_beautytips($options = NULL) {
   static $added = FALSE;
-  $settings = array('beautytips' => array()); 
+  $settings = array('beautytips' => array());
   $js_added = drupal_add_js($data = NULL, 'setting');
 
   if (count($options)) {
     foreach ($options as $beautytip => $content) {
 
       // Ensure the js settings are not added more than once
-      if (isset($js_added['setting']) && is_array($js_added['setting'])) {
-        foreach ($js_added['setting'] as $setting) {
-          if (is_array($setting['beautytips'])) {
+      if (isset($js_added['settings']['data']) && is_array($js_added['settings']['data'])) {
+        foreach ($js_added['settings']['data'] as $setting) {
+          if (isset($setting['beautytips'])) {
             if (array_key_exists($beautytip, $setting['beautytips'])) {
               unset($content);
             }
