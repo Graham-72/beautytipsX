@@ -92,7 +92,6 @@ function beautytips_library() {
  * @param array $options - See README.txt for details
  */
 function beautytips_add_beautytips($options = NULL) {
-  static $added = FALSE;
   $settings = array('beautytips' => array());
   $js_added = drupal_add_js($data = NULL, 'setting');
 
@@ -125,21 +124,29 @@ function beautytips_add_beautytips($options = NULL) {
         }
       }
     }
-
-    if ($added && !empty($settings['beautytips'])) {
-      drupal_add_js($settings, 'setting');
-    }
   }
-  
+
+  beautytips_add_js();
+  if (!empty($settings['beautytips'])) {
+    drupal_add_js($settings, 'setting');
+  }
+}
+
+/**
+ * Add the basic beautytips javascript to the page.
+ */
+function beautytips_add_js() {
+  $added = &drupal_static(__FUNCTION__, FALSE);
   if (!$added) {
     // Add beautytips jQuery plugin and module js.
     drupal_add_library('beautytips', 'beautytips-module');
     // Add this for ie compatibility
     drupal_add_library('beautytips', 'excanvas_r3');
-    drupal_add_js($settings, 'setting');
     if (variable_get('beautytips_ltr', FALSE)) {
       drupal_add_library('beautytips', 'beautytips-ltr');
     }
+
+    // Mark as added so we don't do it again.
     $added = TRUE;
   }
 }
