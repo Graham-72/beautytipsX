@@ -111,9 +111,8 @@ function beautytips_add_beautytips($options = NULL) {
 
       // Setup the settings array for adding js
       if (isset($content) && is_array($content)) {
-        $style = isset($content['style']) ? $content['style'] : 'default';
-        unset($content['style']);
-        $settings['beautytips'][$beautytip] = array_merge(beautytips_get_style($style), $content);
+        $settings['beautytips'][$beautytip] = $content;
+        $settings['beautytips'][$beautytip]['style'] = isset($content['style']) ? $content['style'] : 'default';
         $keys_no_add = array('cssSelect', 'style', 'list', 'text', 'preEval', 'ajaxDisableLink', 'animate');
         foreach ($settings['beautytips'][$beautytip] as $key => $value) {
           // Ensure that numeric options are not passed as strings.
@@ -146,6 +145,10 @@ function beautytips_add_js() {
       drupal_add_library('beautytips', 'beautytips-ltr');
     }
 
+    // Add the styles info.
+    $styles = beautytips_get_styles();
+    drupal_add_js(array('beautytipStyles' => $styles), 'setting');
+
     // Mark as added so we don't do it again.
     $added = TRUE;
   }
@@ -157,7 +160,8 @@ function beautytips_add_js() {
 function beautytips_get_styles($reload = FALSE) {
   $cache = cache_get('beautytips:beautytips-styles');
   if (!$cache || $reload) {
-    $styles = module_invoke_all('define_beautytips_styles');  
+    $styles = module_invoke_all('define_beautytips_styles');
+    drupal_alter('define_beautytips_styles', $styles);
     // Save the beautytips style registry in the cache.
     cache_set('beautytips:beautytips-styles', $styles);
   }
@@ -184,14 +188,14 @@ function beautytips_define_beautytips_styles() {
   if (count($styles['default'])) {
     foreach ($styles['default'] as &$value) {
       if (!is_array($value)) {
-        $value = check_plain($value);
+        $value = (ctype_digit($value) || is_int($value)) ? (int) $value : check_plain($value);
       }
       else if (count($value)) {
         foreach ($value as &$sub_value) {
           $sub_value = check_plain($sub_value);
         }
       }
-    } 
+    }
   }
 
   $styles['plain'] = array();
