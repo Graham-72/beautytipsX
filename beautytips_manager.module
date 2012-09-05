@@ -115,10 +115,14 @@ function beautytips_manager_init() {
 }
 
 /**
- * Implements hook_perm().
+ * Implements hook_permission().
  */
-function beautytips_manager_perm() {
-  return array('use Javascript for custom beautytip display');
+function beautytips_manager_permission() {
+  return array(
+    'use Javascript for custom beautytip display' => array(
+      'title' => t('Use Javascript for custom beautytip display'),
+    ),
+  );
 }
 
 /**
