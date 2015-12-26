@@ -1,7 +1,6 @@
 
 name = BeautyTips UI
 description = Adds settings menu and contributed beautytip popups
-core = 7.x
+backdrop = 1.x
 package = User interface 
-files[] = beautytips_ui.module
 dependencies[] = beautytips
