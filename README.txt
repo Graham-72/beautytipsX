@@ -8,15 +8,15 @@
   of 755 should work for the excanvas_r3 folder (755 means permission settings - rwxr-xr-x)
   On Linux or Mac, you can do this with the command 'sudo chmod -R 755 excanvas_r3'
 
-  Other than that, you just need to turn the module on in the usual Drupal way.
+  Other than that, you just need to turn the module on in the usual Backdrop way.
 
   --------------------------------------------------------------------------------------
                                    ABOUT THE MODULE
     
   The Beautytips module provides ballon-help style tooltip for any page element. 
-  It integrates BeautyTips jQuery plugin by Jeff Robbins with Drupal.  Currently, this 
+  It integrates BeautyTips jQuery plugin by Jeff Robbins with Backdrop.  Currently, this
   module allows tooltips to appear with textfields and textareas.  It also supplies hover
-  tips for Drupal help links and advanced help links.  Most importantly, it allows developers
+  tips for Backdrop help links and advanced help links.  Most importantly, it allows developers
   to add their own beautytips popups to their site without having to delve into jQuery.
   
   For information about the Beauty Tips jQuery plugin:
@@ -50,7 +50,7 @@
 
     1.  Each beautytip will need a name - distinct from other beautytips added on the 
         web page.
-      ex. options['bt_drupal_help_page'] = array( . . .
+      ex. options['bt_backdrop_help_page'] = array( . . .
 
     2.  Each beautytip will need a css(or jQuery) selector.  This is how the bt plugin 
         knows where to place the tooltip.
@@ -90,7 +90,7 @@
   ------------------------------------------------------------------------------------
     ex. Full options array and function call to add beautytips
 
-    $options['bt_drupal_help_page'] = array(
+    $options['bt_backdrop_help_page'] = array(
       'cssSelect' => '.help-items li a',
       'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
       'trigger' => array('mouseover', 'click'),
@@ -107,7 +107,7 @@
   beautytips_add_beautytips by allowing a style to be indicated instead of having to 
   define all of the same options everytime.
   example of adding beautytips with the style option:
-    $options['bt_drupal_help_page'] = array(
+    $options['bt_backdrop_help_page'] = array(
       'cssSelect' => '.help-items li a',
       'ajaxPath' => array("$(this).attr('href')", '.clear-block p'),
       'trigger' => array('mouseover', 'click'),
@@ -128,7 +128,7 @@
   You can setup custom styles and custom tooltips using the beautytips_manage module.
   **TODO: The Rest**
 
-  All styles are added into javascript settings in Drupal.settings.beautytipStyles
+  All styles are added into javascript settings in Backdrop.settings.beautytipStyles
   in case you want to use the setup styles, but want to add you tooltips through
   javascript.
   **TODO: The Rest**
