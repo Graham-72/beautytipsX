@@ -23,8 +23,8 @@ function beautytips_manager_tips_manager_page() {
       $rows[$tip->id]['enabled'] = $tip->enabled ? t('Enabled') : t('Disabled');
       $rows[$tip->id]['visibility'] = $visibility[$tip->visibility];
       $rows[$tip->id]['pages'] = $pages;
-      $rows[$tip->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-tips/$tip->id/edit");
-      $rows[$tip->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-tips/$tip->id/delete");
+      $rows[$tip->id]['edit'] = l(t('edit'), "admin/config/content/beautytips/custom-tips/$tip->id/edit");
+      $rows[$tip->id]['delete'] = l(t('delete'), "admin/config/content/beautytips/custom-tips/$tip->id/delete");
     }
   }
   else {
@@ -47,9 +47,9 @@ function beautytips_manager_styles_manager_page() {
       $name = check_plain($style->name);
       unset($style->name);
       $rows[$style->id]['name'] = '<span class="bt-style-' . $name . '">' . $name . '</span>';
-      $rows[$style->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-styles/$style->id/edit");
+      $rows[$style->id]['edit'] = l(t('edit'), "admin/config/content/beautytips/custom-styles/$style->id/edit");
       if ($name != config_get('beautytips.settings','beautytips_default_style')) {
-        $rows[$style->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-styles/$style->id/delete");
+        $rows[$style->id]['delete'] = l(t('delete'), "admin/config/content/beautytips/custom-styles/$style->id/delete");
       }
       else {
         $rows[$style->id]['delete'] = t('Default style');
@@ -270,7 +270,7 @@ function beautytips_manager_custom_tips_form_submit($form, &$form_state) {
 
   beautytips_manager_save_custom_tip($tip);
   cache_clear_all('beautytips:beautytips-ui-custom-tips', 'cache');
-  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-tips';
+  $form_state['redirect'] = 'admin/config/content/beautytips/custom-tips';
 }
 
 /**
@@ -437,7 +437,7 @@ function beautytips_manager_custom_styles_form_submit($form, &$form_state) {
   }
   beautytips_manager_save_custom_style($style);
   cache_clear_all('beautytips:beautytips-styles', 'cache');
-  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-styles';
+  $form_state['redirect'] = 'admin/config/content/beautytips/custom-styles';
 }
 
 /**
@@ -450,7 +450,7 @@ function beautytips_manager_delete_tip_confirm_form($form, &$form_state, $id) {
     '#value' => $id,
   );
   $question = t('Are you sure you want to the beautytip applied to element %element?', array('%element' => $tip->element));
-  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/custom-tips');
+  return confirm_form($form, $question, 'admin/config/content/beautytips/custom-tips');
 }
 
 /**
@@ -459,7 +459,7 @@ function beautytips_manager_delete_tip_confirm_form($form, &$form_state, $id) {
 function beautytips_manager_delete_tip_confirm_form_submit($form, &$form_state) {
   beautytips_manager_delete_custom_tip($form_state['values']['id']);
   cache_clear_all('beautytips:beautytips-ui-custom-tips', 'cache');
-  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-tips';
+  $form_state['redirect'] = 'admin/config/content/beautytips/custom-tips';
 }
 
 /**
@@ -468,7 +468,7 @@ function beautytips_manager_delete_tip_confirm_form_submit($form, &$form_state) 
 function beautytips_manager_delete_style_page($id) {
   $style = beautytips_manager_get_custom_style($id);
   if ($style->name == config_get('beautytips.settings','beautytips_default_style')) {
-    return t('You cannot delete this style because is set as the default style.  You may change this <a href="@link">here</a>.', array('@link' => '/admin/config/user-interface/beautytips'));
+    return t('You cannot delete this style because is set as the default style.  You may change this <a href="@link">here</a>.', array('@link' => '/admin/config/content/beautytips'));
   }
 
   return backdrop_get_form('beautytips_manager_delete_style_confirm_form', $id);
@@ -485,7 +485,7 @@ function beautytips_manager_delete_style_confirm_form($form, &$form_state, $id) 
     '#value' => $id,
   );
   $question = t('Are you sure you want to the beautytip stlye %style?', array('%style' => $style->name));
-  return confirm_form($form, $question, 'admin/config/user-interface/beautytips/custom-styles');
+  return confirm_form($form, $question, 'admin/config/content/beautytips/custom-styles');
 }
 
 /**
@@ -493,5 +493,5 @@ function beautytips_manager_delete_style_confirm_form($form, &$form_state, $id) 
  */
 function beautytips_manager_delete_style_confirm_form_submit($form, &$form_state) {
   beautytips_manager_delete_custom_style($form_state['values']['id']);
-  $form_state['redirect'] = 'admin/config/user-interface/beautytips/custom-styles';
+  $form_state['redirect'] = 'admin/config/content/beautytips/custom-styles';
 }

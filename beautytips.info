@@ -4,5 +4,5 @@ description = API for implementing jQuery beautyTips tooltip plugin
 backdrop = 1.x
 type = module
 package = User interface 
-configure = admin/config/user-interface/beautytips
+configure = admin/config/content/beautytips
 

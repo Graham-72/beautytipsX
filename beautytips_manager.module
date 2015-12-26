@@ -9,14 +9,14 @@
  * Implements hook_menu().
  */
 function beautytips_manager_menu() {
-  $items['admin/config/user-interface/beautytips/custom-tips'] = array(
+  $items['admin/config/content/beautytips/custom-tips'] = array(
     'title' => 'BeautyTips Custom-Tips',
     'page callback' => 'beautytips_manager_tips_manager_page',
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_LOCAL_TASK,
   );
-  $items['admin/config/user-interface/beautytips/custom-tips/%/edit'] = array(
+  $items['admin/config/content/beautytips/custom-tips/%/edit'] = array(
     'title' => 'BeautyTips Custom-Tip Edit',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_tips_form', 5),
@@ -24,7 +24,7 @@ function beautytips_manager_menu() {
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
   );
-  $items['admin/config/user-interface/beautytips/custom-tips/%/delete'] = array(
+  $items['admin/config/content/beautytips/custom-tips/%/delete'] = array(
     'title' => 'BeautyTips Custom-Tip Delete',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_delete_tip_confirm_form', 5),
@@ -32,7 +32,7 @@ function beautytips_manager_menu() {
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
   );
-  $items['admin/config/user-interface/beautytips/custom-tips/add'] = array(
+  $items['admin/config/content/beautytips/custom-tips/add'] = array(
     'title' => 'BeautyTips Custom-Tip Add',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_tips_form'),
@@ -40,14 +40,14 @@ function beautytips_manager_menu() {
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_LOCAL_ACTION,
   );
-  $items['admin/config/user-interface/beautytips/custom-styles'] = array(
+  $items['admin/config/content/beautytips/custom-styles'] = array(
     'title' => 'BeautyTips Custom Styles',
     'page callback' => 'beautytips_manager_styles_manager_page',
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_LOCAL_TASK,
   );
-  $items['admin/config/user-interface/beautytips/custom-styles/%/edit'] = array(
+  $items['admin/config/content/beautytips/custom-styles/%/edit'] = array(
     'title' => 'BeautyTips Custom Style Edit',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_styles_form', 5),
@@ -55,7 +55,7 @@ function beautytips_manager_menu() {
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
   );
-  $items['admin/config/user-interface/beautytips/custom-styles/%/delete'] = array(
+  $items['admin/config/content/beautytips/custom-styles/%/delete'] = array(
     'title' => 'BeautyTips Manager Delete',
     'page callback' => 'beautytips_manager_delete_style_page',
     'page arguments' => array(5),
@@ -63,7 +63,7 @@ function beautytips_manager_menu() {
     'file' => 'beautytips_manager.admin.inc',
     'type' => MENU_VISIBLE_IN_BREADCRUMB,
   );
-  $items['admin/config/user-interface/beautytips/custom-styles/add'] = array(
+  $items['admin/config/content/beautytips/custom-styles/add'] = array(
     'title' => 'BeautyTips Custom Style Add',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_styles_form'),

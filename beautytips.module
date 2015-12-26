@@ -29,7 +29,7 @@ function beautytips_init() {
  * Implements hook_menu().
  */
 function beautytips_menu() {
-  $items['admin/config/user-interface/beautytips'] = array(
+  $items['admin/config/content/beautytips'] = array(
     'title' => 'BeautyTips',
     'description' => 'Configure settings related to the Beautytips module.',
     'page callback' => 'backdrop_get_form',
