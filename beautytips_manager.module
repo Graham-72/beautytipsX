@@ -18,7 +18,7 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-tips/%/edit'] = array(
     'title' => 'BeautyTips Custom-Tip Edit',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_tips_form', 5),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
@@ -26,7 +26,7 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-tips/%/delete'] = array(
     'title' => 'BeautyTips Custom-Tip Delete',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_delete_tip_confirm_form', 5),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
@@ -34,7 +34,7 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-tips/add'] = array(
     'title' => 'BeautyTips Custom-Tip Add',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_tips_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
@@ -49,7 +49,7 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-styles/%/edit'] = array(
     'title' => 'BeautyTips Custom Style Edit',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_styles_form', 5),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
@@ -65,7 +65,7 @@ function beautytips_manager_menu() {
   );
   $items['admin/config/user-interface/beautytips/custom-styles/add'] = array(
     'title' => 'BeautyTips Custom Style Add',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_manager_custom_styles_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips_manager.admin.inc',
@@ -87,11 +87,11 @@ function beautytips_manager_init() {
       }
       // Match path if necessary
       if ($tip->pages) {
-        $path = drupal_get_path_alias($_GET['q']);
+        $path = backdrop_get_path_alias($_GET['q']);
         // Compare with the internal and path alias (if any).
-        $page_match = drupal_match_path($path, $tip->pages);
+        $page_match = backdrop_match_path($path, $tip->pages);
         if ($path != $_GET['q']) {
-          $page_match = $page_match || drupal_match_path($_GET['q'], $tip->pages);
+          $page_match = $page_match || backdrop_match_path($_GET['q'], $tip->pages);
         }
         // When $tip->visibility has a value of 0, the beautytip is displayed on
         // all pages except those listed in $tip->pages. When set to 1, it
@@ -140,10 +140,10 @@ function beautytips_manager_delete_custom_tip($id) {
 function beautytips_manager_save_custom_tip($tip) {
   $tip = (object) $tip;
   if (isset($tip->id) && $tip->id) {
-    drupal_write_record('beautytips_custom_tips', $tip, 'id');
+    backdrop_write_record('beautytips_custom_tips', $tip, 'id');
   }
   else {
-    drupal_write_record('beautytips_custom_tips', $tip);
+    backdrop_write_record('beautytips_custom_tips', $tip);
   }
   return $tip;
 }
@@ -266,10 +266,10 @@ function beautytips_manager_delete_custom_style($id) {
 function beautytips_manager_save_custom_style($style) {
   $style = (object) $style;
   if (isset($style->id) && $style->id) {
-    drupal_write_record('beautytips_custom_styles', $style, 'id');
+    backdrop_write_record('beautytips_custom_styles', $style, 'id');
   }
   else {
-    drupal_write_record('beautytips_custom_styles', $style);
+    backdrop_write_record('beautytips_custom_styles', $style);
   }
   return $style;
 }

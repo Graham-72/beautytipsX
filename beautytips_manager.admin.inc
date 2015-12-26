@@ -48,7 +48,7 @@ function beautytips_manager_styles_manager_page() {
       unset($style->name);
       $rows[$style->id]['name'] = '<span class="bt-style-' . $name . '">' . $name . '</span>';
       $rows[$style->id]['edit'] = l(t('edit'), "admin/config/user-interface/beautytips/custom-styles/$style->id/edit");
-      if ($name != variable_get('beautytips_default_style', 'plain')) {
+      if ($name != config_get('beautytips.settings','beautytips_default_style')) {
         $rows[$style->id]['delete'] = l(t('delete'), "admin/config/user-interface/beautytips/custom-styles/$style->id/delete");
       }
       else {
@@ -75,7 +75,7 @@ function beautytips_manager_styles_manager_page() {
  * Form for configuring custom beautytips.
  */
 function beautytips_manager_custom_tips_form($form, &$form_state, $id = NULL) {
-  drupal_add_css(drupal_get_path('module', 'beautytips') . '/css/beautytips.css');
+  backdrop_add_css(backdrop_get_path('module', 'beautytips') . '/css/beautytips.css');
   $tip = beautytips_manager_get_custom_tip($id);
   if (!isset($tip->id)) {
     $tip = NULL;
@@ -208,7 +208,7 @@ function beautytips_manager_custom_tips_form($form, &$form_state, $id = NULL) {
   );
 
   $options = array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.'));
-  $description = t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>'));
+  $description = t("Enter one page per line as Backdrop paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>'));
 
   $form['tip']['visibility'] = array(
     '#type' => 'radios',
@@ -354,12 +354,12 @@ function beautytips_manager_custom_styles_form($form, &$form_state, $id = NULL) 
     );
   }
 
-  $path = drupal_get_path('module', 'beautytips');
+  $path = backdrop_get_path('module', 'beautytips');
   // TODO: This could be in a library
-  drupal_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
-  drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
+  backdrop_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
+  backdrop_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
   beautytips_add_beautytips();
-  drupal_add_js($path . '/js/bt_custom_styles.js');
+  backdrop_add_js($path . '/js/bt_custom_styles.js');
   $form['save'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -467,11 +467,11 @@ function beautytips_manager_delete_tip_confirm_form_submit($form, &$form_state) 
  */
 function beautytips_manager_delete_style_page($id) {
   $style = beautytips_manager_get_custom_style($id);
-  if ($style->name == variable_get('beautytips_default_style', 'plain')) {
+  if ($style->name == config_get('beautytips.settings','beautytips_default_style')) {
     return t('You cannot delete this style because is set as the default style.  You may change this <a href="@link">here</a>.', array('@link' => '/admin/config/user-interface/beautytips'));
   }
 
-  return drupal_get_form('beautytips_manager_delete_style_confirm_form', $id);
+  return backdrop_get_form('beautytips_manager_delete_style_confirm_form', $id);
   
 }
 

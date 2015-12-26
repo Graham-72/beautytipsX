@@ -1,0 +1,15 @@
+{
+  "_config_name": "beautytips.settings",
+  "beautytips_always_add": 0,
+  "beautytips_added_selectors_array": "",
+  "beautytips_ltr": 0,
+  "beautytips_default_style": "plain",
+  "beautytips_custom_style": "",
+  "beautytips_defaults": "",
+  "beautytips_backdrop_help": FALSE,
+  "beautytips_advanced_help": FALSE,
+  "beautytips_text_input": FALSE,
+  "beautytips_position": "bottom",
+  "beautytips_form_id": "",
+  "beautytips_show_form": ""
+}

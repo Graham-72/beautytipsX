@@ -3,15 +3,15 @@
  * Defines the default beautytip and adds them to the content on the page
  */
 (function ($) {
-  Drupal.behaviors.beautytips = {
+  Backdrop.behaviors.beautytips = {
     attach: function(context, settings) {
-      // Fix for drupal attach behaviors in case the plugin is not attached.
+      // Fix for backdrop attach behaviors in case the plugin is not attached.
       if (typeof(jQuery.bt) == 'undefined' && jQuery.bt == null){
         return;
       }
       jQuery.bt.options.closeWhenOthersOpen = true;
-      var beautytips = Drupal.settings.beautytips;
-      var styles = Drupal.settings.beautytipStyles;
+      var beautytips = Backdrop.settings.beautytips;
+      var styles = Backdrop.settings.beautytipStyles;
 
       // Add the tooltips to the page
       for (var key in beautytips) {

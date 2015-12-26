@@ -3,4 +3,4 @@ name = BeautyTips Manager
 description = Adds graphical manager for creating custom beautytips.
 package = User interface
 dependencies[] = beautytips
-core = 7.x
+backdrop = 1.x

@@ -216,58 +216,45 @@ function beautytips_manager_schema() {
   return $schema;
 }
 
+
+
 /**
- * Update to add enabled field.
+ * Move beautytips settings from variables to config.
  */
-function beautytips_manager_update_7000() {
-  $ret = array();
+function beautytips_manager_update_1000(){
+  $config = config('beautytips.settings');
+  $config->set('beautytips_always_add', update_variable_get('beautytips_always_add', 0));
+  $config->set('beautytips_added_selectors_array', update_variable_get('beautytips_added_selectors_array', ''));
+  $config->set('beautytips_ltr', update_variable_get('beautytips_ltr', 0));
+  $config->set('beautytips_default_style', update_variable_get('beautytips_default_style', 'plain'));
+  $config->set('beautytips_custom_style', update_variable_get('beautytips_custom_style', ''));
+  $config->set('beautytips_defaults', update_variable_get('beautytips_defaults', ''));
+  $config->set('beautytips_backdrop_help', update_variable_get('beautytips_backdrop_help', FALSE));
+  $config->set('beautytips_advanced_help', update_variable_get('beautytips_advanced_help', FALSE));
+  $config->set('beautytips_text_input', update_variable_get('beautytips_text_input', FALSE));
+  $config->set('beautytips_position', update_variable_get('beautytips_position', 'bottom'));
+  $config->set('beautytips_form_id', update_variable_get('beautytips_form_id', ''));
+  $config->set('beautytips_show_form', update_variable_get('beautytips_show_form', ''));
+  $config->save();
 
-  // Make sure this field doesn't already exist.
-  if (db_field_exists('beautytips_custom_tips', 'enabled')) {
-    return $ret;
-  }
-
-  $spec = array(
-    'type' => 'int',
-    'size' => 'tiny',
-    'unsigned' => TRUE,
-    'description' => t('Whether or not this tip is enabled'),
-  );
-  db_add_field('beautytips_custom_tips', 'enabled', $spec);
-  return $ret;
+  // Delete variables.
+  update_variable_del('beautytips_always_add');
+  update_variable_del('beautytips_added_selectors_array');
+  update_variable_del('beautytips_ltr');
+  update_variable_del('beautytips_default_style');
+  update_variable_del('beautytips_custom_style');
+  update_variable_del('beautytips_defaults');
+  update_variable_del('beautytips_backdrop_help');
+  update_variable_del('beautytips_advanced_help');
+  update_variable_del('beautytips_text_input');
+  update_variable_del('beautytips_position');
+  update_variable_del('beautytips_form_id');
+  update_variable_del('beautytips_show_form');
 }
 
 /**
- * Update to add enabled field.
+ * Implements hook_update_last_removed().
  */
-function beautytips_manager_update_7001() {
-  $ret = array();
-
-  // Make sure this field doesn't already exist.
-  if (db_field_exists('beautytips_custom_tips', 'disable_link')) {
-    return $ret;
-  }
-  $spec = array(
-    'type' => 'int',
-    'not null' => TRUE,
-    'default' => 0,
-    'size' => 'tiny',
-    'unsigned' => TRUE,
-    'decription' => t('Whether to disable link or not.'),
-  );
-
-  db_add_field('beautytips_custom_tips', 'disable_link', $spec);
-  return $ret;
-}
-
-/**
- * Extend the length of the element field.
- */
-function beautytips_manager_update_7002() {
-  db_change_field('beautytips_custom_tips', 'element', 'element', array(
-    'type' => 'varchar',
-    'length' => 255,
-    'description' => t('The element to which this beautytips will be applied.'),
-    'not null' => TRUE,
-  ));
+function beautytips_manager_update_last_removed() {
+  return 7002;
 }

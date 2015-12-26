@@ -30,7 +30,7 @@ function beautytips_ui_admin_settings(&$form) {
 function beautytips_ui_admin_submit($form, $form_state) {
   module_invoke('menu', 'rebuild');
   cache_clear_all('*', 'cache_menu', TRUE);
-  drupal_theme_rebuild();
+  backdrop_theme_rebuild();
 }
 
 /**
@@ -98,7 +98,7 @@ function beautytips_ui_include_invoke($module, $hook, $args) {
  */
 function beautytips_ui_include_list() {
   $files = array(
-    'drupal_help.inc' => 'drupal_help',
+    'backdrop_help.inc' => 'backdrop_help',
     'textinput.inc' => 'textinput',
   );
   foreach ($files as $file => $name) {

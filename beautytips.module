@@ -9,10 +9,10 @@
  * Implements hook_init().
  */
 function beautytips_init() {
-  if (variable_get('beautytips_always_add', 0)) {
+  if (config_get('beautytips.settings','beautytips_always_add')) {
     $selectors = array();
     $options = array();
-    $selectors = variable_get('beautytips_added_selectors_array', array());
+    $selectors = config_get('beautytips.settings','beautytips_added_selectors_array');
     if (count($selectors)) {
       foreach ($selectors as $selector) {
         if (!empty($selector)) {
@@ -32,7 +32,7 @@ function beautytips_menu() {
   $items['admin/config/user-interface/beautytips'] = array(
     'title' => 'BeautyTips',
     'description' => 'Configure settings related to the Beautytips module.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('beautytips_admin'),
     'access arguments' => array('administer site configuration'),
     'file' => 'beautytips.admin.inc',
@@ -45,7 +45,7 @@ function beautytips_menu() {
  */
 function beautytips_library() {
   $libraries = array();
-  $path = drupal_get_path('module', 'beautytips');
+  $path = backdrop_get_path('module', 'beautytips');
   $expath = $path .'/other_libs/excanvas_r3';
 
   $libraries['beautytips-jquery'] = array(
@@ -56,7 +56,7 @@ function beautytips_library() {
   );
   $libraries['beautytips-module'] = array(
     'title' => 'BeautyTips Module',
-    'website' => 'http://drupal.org/project/beautytips',
+    'website' => 'http://backdrop.org/project/beautytips',
     'version' => '7.x-2.x',
     'js' => array($path .'/js/beautytips.min.js' => array()),
     'dependencies' => array(
@@ -74,7 +74,7 @@ function beautytips_library() {
 
   $libraries['beautytips-ltr'] = array(
     'title' => 'BeautyTips Module LTR support',
-    'website' => 'http://drupal.org/project/beautytips',
+    'website' => 'http://backdrop.org/project/beautytips',
     'version' => '7.x-2.x',
     'css' => array($path .'/css/beautytips-ltr.css' => array()),
     'dependencies' => array(
@@ -93,7 +93,7 @@ function beautytips_library() {
  */
 function beautytips_add_beautytips($options = NULL) {
   $settings = array('beautytips' => array());
-  $js_added = drupal_add_js($data = NULL, 'setting');
+  $js_added = backdrop_add_js($data = NULL, 'setting');
 
   if (count($options)) {
     foreach ($options as $beautytip => $content) {
@@ -127,7 +127,7 @@ function beautytips_add_beautytips($options = NULL) {
 
   beautytips_add_js();
   if (!empty($settings['beautytips'])) {
-    drupal_add_js($settings, 'setting');
+    backdrop_add_js($settings, 'setting');
   }
 }
 
@@ -135,19 +135,19 @@ function beautytips_add_beautytips($options = NULL) {
  * Add the basic beautytips javascript to the page.
  */
 function beautytips_add_js() {
-  $added = &drupal_static(__FUNCTION__, FALSE);
+  $added = &backdrop_static(__FUNCTION__, FALSE);
   if (!$added) {
     // Add beautytips jQuery plugin and module js.
-    drupal_add_library('beautytips', 'beautytips-module');
+    backdrop_add_library('beautytips', 'beautytips-module');
     // Add this for ie compatibility
-    drupal_add_library('beautytips', 'excanvas_r3');
-    if (variable_get('beautytips_ltr', FALSE)) {
-      drupal_add_library('beautytips', 'beautytips-ltr');
+    backdrop_add_library('beautytips', 'excanvas_r3');
+    if (config_get('beautytips.settings','beautytips_ltr')) {
+      backdrop_add_library('beautytips', 'beautytips-ltr');
     }
 
     // Add the styles info.
     $styles = beautytips_get_styles();
-    drupal_add_js(array('beautytipStyles' => $styles), 'setting');
+    backdrop_add_js(array('beautytipStyles' => $styles), 'setting');
 
     // Mark as added so we don't do it again.
     $added = TRUE;
@@ -161,7 +161,7 @@ function beautytips_get_styles($reload = FALSE) {
   $cache = cache_get('beautytips:beautytips-styles');
   if (!$cache || $reload) {
     $styles = module_invoke_all('define_beautytips_styles');
-    drupal_alter('define_beautytips_styles', $styles);
+    backdrop_alter('define_beautytips_styles', $styles);
     // Save the beautytips style registry in the cache.
     cache_set('beautytips:beautytips-styles', $styles);
   }
@@ -183,7 +183,7 @@ function beautytips_get_style($style = 'default') {
  * Implements hook_define_beautytips_styles().
  */
 function beautytips_define_beautytips_styles() {
-  $styles['default'] = variable_get('beautytips_defaults', array());
+  $styles['default'] = config_get('beautytips.settings','beautytips_defaults');
   // Cleanup any problems with defaults.
   if (count($styles['default'])) {
     foreach ($styles['default'] as &$value) {
@@ -284,5 +284,17 @@ function beautytips_define_beautytips_styles() {
     'shadowOffsetY' => 4,
   );
   return $styles;
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function beautytips_config_info()
+{
+  $prefixes['beautytips.settings'] = array(
+    'label' => t('BeautyTips'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
 }
 

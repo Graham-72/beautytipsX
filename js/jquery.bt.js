@@ -988,7 +988,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
   }; // </ jQuery.fn.bt() >
   
   /**
-   * jQuery's compat.js (used in Drupal's jQuery upgrade module, overrides the $().position() function
+   * jQuery's compat.js (used in Backdrop's jQuery upgrade module, overrides the $().position() function
    *  this is a copy of that function to allow the plugin to work when compat.js is present
    *  once compat.js is fixed to not override existing functions, this function can be removed
    *  and .btPosion() can be replaced with .position() above...

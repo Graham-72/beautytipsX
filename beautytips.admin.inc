@@ -14,10 +14,10 @@ function beautytips_admin() {
     '#title' => t('Add beautytips js to every page'),
     '#description' => t('This allows you to give the class \'beautytips\' to any element on a page and the title attribute will popup as a beautytip.<br /> i.e. <i> &lt;p class="beautytips" title="type the text you want beautytips to display here"&gt .....&lt/p&gt</i>'),
     '#type' => 'checkbox',
-    '#default_value' => variable_get('beautytips_always_add', 0),
+    '#default_value' => config_get('beautytips.settings','beautytips_always_add'),
     '#weight' => -1,
   );
-  $selectors = variable_get('beautytips_added_selectors_array', '');
+  $selectors = config_get('beautytips.settings','beautytips_added_selectors_array');
   $form['beautytips_added_selectors_string'] = array(
     '#title' => t('Add beautytips to the following selectors'),
     '#description' => t("Separate selectors with a comma.  Beautytips will be added to each of these on every page.  The element's title attribute will be the text used. (OPTIONAL)"),
@@ -29,7 +29,7 @@ function beautytips_admin() {
     '#title' => t('Support Left to Right display'),
     '#description' => t('Only check this if this is an ltr site.  This adds css to support it.'),
     '#type' => 'checkbox',
-    '#default_value' => variable_get('beautytips_ltr', 0),
+    '#default_value' => config_get('beautytips.settings','beautytips_ltr'),
   );
   $form['beautytips_default_styles'] = array(
     '#type' => 'fieldset',
@@ -61,7 +61,7 @@ function beautytips_admin() {
     '#prefix' => '<div id="beauty-default-styles">',
     '#suffix' => '</div>',
     '#options' => $style_options,
-    '#default_value' => variable_get('beautytips_default_style', 'plain'),
+    '#default_value' => config_get('beautytips.settings','beautytips_default_style'),
   );
   $style_options = array(
     'fill' => t('background color (string - html color)'), 
@@ -84,7 +84,7 @@ function beautytips_admin() {
     '#attributes' => array('class' => array('bt-custom-styles')),
     '#prefix' => '<div id="beautytips-site-wide-popup"><div id="beauty-text"><p>Hover here to see the current site-wide beautytips</p></div></div>',
   );
-  $custom_style = variable_get('beautytips_custom_style', NULL);
+  $custom_style = config_get('beautytips.settings','beautytips_custom_style');
   foreach ($style_options as $option => $description) {
     $form['beautytips_default_styles']['custom_styles']['bt-options-box-' . $option] = array(
       '#title' => $option,
@@ -125,19 +125,27 @@ function beautytips_admin() {
 
   $form['#submit'][] = 'beautytips_admin_submit';
   
-  $path = drupal_get_path('module', 'beautytips');
-  drupal_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
-  drupal_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
-  drupal_add_css($path .'/css/beautytips.css');
+  $path = backdrop_get_path('module', 'beautytips');
+  backdrop_add_js($path . '/other_libs/colorpicker/js/colorpicker.js');
+  backdrop_add_css($path . '/other_libs/colorpicker/css/colorpicker.css');
+  backdrop_add_css($path .'/css/beautytips.css');
   beautytips_add_beautytips($bt_style_options);
-  drupal_add_js($path . '/js/bt_admin_page.js');
+  backdrop_add_js($path . '/js/bt_admin_page.js');
 
   if (module_exists('beautytips_ui')) {
     beautytips_ui_admin_settings($form); 
   }
 
-  return system_settings_form($form);
+  // Add a submit button
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+  );
+
+  return $form;
 }
+
 
 /**
  * Validation for beautytips settings form
@@ -220,9 +228,9 @@ function beautytips_admin_submit($form, &$form_state) {
         $custom_style['cssStyles'] = $css_style;
       }
     }
-    variable_set('beautytips_defaults', $style);
-    variable_set('beautytips_custom_style', $custom_style);
-    variable_set('beautytips_default_style', $values['beautytips_default_style']);
+    config_set('beautytips.settings','beautytips_defaults', $style);
+    config_set('beautytips.settings','beautytips_custom_style', $custom_style);
+    config_set('beautytips.settings','beautytips_default_style', $values['beautytips_default_style']);
     cache_clear_all('beautytips:beautytips-styles', 'cache');
 
     // Store array of selectors that bt will be added to on every page
@@ -233,7 +241,7 @@ function beautytips_admin_submit($form, &$form_state) {
         $selectors[$key] = trim($selector);
       }
     }
-    variable_set('beautytips_added_selectors_array', $selectors);
+    config_set('beautytips.settings','beautytips_added_selectors_array', $selectors);
   }
   if (module_exists('beautytips_ui')) {
     beautytips_ui_admin_submit($form, $form_state);

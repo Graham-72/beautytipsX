@@ -2,7 +2,7 @@
 /**
  * jQuery to show on beautytips admin settings page
  */
-Drupal.behaviors.beautytipsAdmin = {
+Backdrop.behaviors.beautytipsAdmin = {
   attach: function(context, settings) {
     if (!jQuery("#edit-beautytips-always-add").attr("checked")) {
       // Disable input and hide its description.
@@ -101,6 +101,6 @@ function beautytipsSetupDefaultOptions(themeSettings) {
 }
 
 function beautytipsGetThemeSettings() {
-  themeSettings = Drupal.settings.beautytips; 
+  themeSettings = Backdrop.settings.beautytips;
   return themeSettings;
 }

@@ -3,7 +3,7 @@
  * jQuery for viewing changes to custom beautytips style.
  */
 (function ($) {
-  Drupal.behaviors.beautytipsCustomStyles = {
+  Backdrop.behaviors.beautytipsCustomStyles = {
     attach: function(context, settings) {
       var btPopup = $("#beautytips-popup-changes");
       var popupText = "Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi ferm entum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien.";
@@ -27,7 +27,7 @@
         $(this).ColorPickerSetColor(this.value);
       });
 
-      var themeSettings = Drupal.settings.beautytips;
+      var themeSettings = Backdrop.settings.beautytips;
       $("#beauty-default-styles input").click(function() {
         currentTheme = $("input[name='beautytips_default_style']:checked").val();
       });
