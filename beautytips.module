@@ -41,9 +41,9 @@ function beautytips_menu() {
 }
 
  /**
- * Implements hook_library().
+ * Implements hook_library_info().
  */
-function beautytips_library() {
+function beautytips_library_info() {
   $libraries = array();
   $path = backdrop_get_path('module', 'beautytips');
   $expath = $path .'/other_libs/excanvas_r3';
@@ -56,7 +56,7 @@ function beautytips_library() {
   );
   $libraries['beautytips-module'] = array(
     'title' => 'BeautyTips Module',
-    'website' => 'http://backdrop.org/project/beautytips',
+    'website' => 'http://drupal.org/project/beautytips',
     'version' => '7.x-2.x',
     'js' => array($path .'/js/beautytips.min.js' => array()),
     'dependencies' => array(
