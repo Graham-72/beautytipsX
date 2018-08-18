@@ -4,3 +4,4 @@ description = Adds graphical manager for creating custom beautytips.
 package = User interface
 dependencies[] = beautytips
 backdrop = 1.x
+type = module

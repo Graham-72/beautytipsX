@@ -8,7 +8,13 @@
       var btPopup = $("#beautytips-popup-changes");
       var popupText = "Sed justo nibh, ultrices ut gravida et, laoreet et elit. Nullam consequat lacus et dui dignissim venenatis. Curabitur quis urna eget mi interdum viverra quis eu enim. Ut sit amet nunc augue. Morbi ferm entum ultricies velit sed aliquam. Etiam dui tortor, auctor sed tempus ac, auctor sed sapien.";
       var currentTheme = $("input[name='beautytips_default_style']:checked").val(); 
-      btPopup.bt(popupText, {trigger: 'none', clickAnywhereToClose: false, closeWhenOthersOpen: false, positions: 'bottom', cssClass: 'beautytips-fixed-beautytips'});
+      btPopup.bt(popupText, {
+        trigger: 'none',
+        clickAnywhereToClose: false,
+        closeWhenOthersOpen: false,
+        positions: 'bottom',
+        cssClass: 'beautytips-fixed-beautytips'
+      });
       btPopup.btOn();
 
       

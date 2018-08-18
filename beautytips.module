@@ -50,8 +50,8 @@ function beautytips_library_info() {
 
   $libraries['beautytips-jquery'] = array(
     'title' => 'BeautyTips Jquery Plugin',
-    'website' => 'http://plugins.jquery.com/project/bt',
-    'version' => '0.9.5-rc1',
+    'website' => 'https://github.com/golems-gabb/beautytips',
+    'version' => '0.9.5',
     'js' => array($path .'/js/jquery.bt.min.js' => array()),
   );
   $libraries['beautytips-module'] = array(

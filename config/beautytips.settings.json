@@ -6,9 +6,9 @@
   "beautytips_default_style": "plain",
   "beautytips_custom_style": "",
   "beautytips_defaults": "",
-  "beautytips_backdrop_help": FALSE,
-  "beautytips_advanced_help": FALSE,
-  "beautytips_text_input": FALSE,
+  "beautytips_backdrop_help": 0,
+  "beautytips_advanced_help": 0,
+  "beautytips_text_input": 0,
   "beautytips_position": "bottom",
   "beautytips_form_id": "",
   "beautytips_show_form": ""

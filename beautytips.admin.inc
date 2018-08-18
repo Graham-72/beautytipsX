@@ -9,7 +9,7 @@
  * Menu callback - beautytips admin settings form
  */
 function beautytips_admin() {
-  
+  $form = array();
   $form['beautytips_always_add'] = array(
     '#title' => t('Add beautytips js to every page'),
     '#description' => t('This allows you to give the class \'beautytips\' to any element on a page and the title attribute will popup as a beautytip.<br /> i.e. <i> &lt;p class="beautytips" title="type the text you want beautytips to display here"&gt .....&lt/p&gt</i>'),
@@ -152,6 +152,7 @@ function beautytips_admin() {
  */
 function beautytips_admin_validate($form, &$form_state) {
   $values = $form_state['values'];
+  dpm($values,'VALIDATE VALUES');
   $integer_fields = array('bt-options-box-strokeWidth', 'bt-options-box-cornerRadius', 'bt-options-box-spikeGirth', 'bt-options-box-spikeLength', 'bt-options-box-shadowBlur'); 
   $pixel_fields = array('bt-options-box-width', 'bt-options-box-padding', 'bt-options-css-fontSize');
   $color_fields = array('bt-options-box-fill', 'bt-options-css-color', 'bt-options-box-shadowColor'); 
@@ -184,6 +185,7 @@ function beautytips_admin_validate($form, &$form_state) {
  */
 function beautytips_admin_submit($form, &$form_state) {
   $values = $form_state['values'];
+  dpm($values,'SUBMITTED VALUES');
   if (count($values)) {
     $custom_style = array();
     $css_style = array();
@@ -228,6 +230,8 @@ function beautytips_admin_submit($form, &$form_state) {
         $custom_style['cssStyles'] = $css_style;
       }
     }
+    config_set('beautytips.settings','beautytips_always_add', $values['beautytips_always_add']);
+    config_set('beautytips.settings','beautytips_ltr', $values['beautytips_ltr']);
     config_set('beautytips.settings','beautytips_defaults', $style);
     config_set('beautytips.settings','beautytips_custom_style', $custom_style);
     config_set('beautytips.settings','beautytips_default_style', $values['beautytips_default_style']);
