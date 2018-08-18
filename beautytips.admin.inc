@@ -152,8 +152,7 @@ function beautytips_admin() {
  */
 function beautytips_admin_validate($form, &$form_state) {
   $values = $form_state['values'];
-  dpm($values,'VALIDATE VALUES');
-  $integer_fields = array('bt-options-box-strokeWidth', 'bt-options-box-cornerRadius', 'bt-options-box-spikeGirth', 'bt-options-box-spikeLength', 'bt-options-box-shadowBlur'); 
+  $integer_fields = array('bt-options-box-strokeWidth', 'bt-options-box-cornerRadius', 'bt-options-box-spikeGirth', 'bt-options-box-spikeLength', 'bt-options-box-shadowBlur');
   $pixel_fields = array('bt-options-box-width', 'bt-options-box-padding', 'bt-options-css-fontSize');
   $color_fields = array('bt-options-box-fill', 'bt-options-css-color', 'bt-options-box-shadowColor'); 
   $sanitize_strings = array('bt-options-cssClass', 'bt-options-css-fontFamily', 'bt-options-css-fontWeight');
