@@ -184,7 +184,6 @@ function beautytips_admin_validate($form, &$form_state) {
  */
 function beautytips_admin_submit($form, &$form_state) {
   $values = $form_state['values'];
-  dpm($values,'SUBMITTED VALUES');
   if (count($values)) {
     $custom_style = array();
     $css_style = array();
