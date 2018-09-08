@@ -222,9 +222,16 @@ function beautytips_define_beautytips_styles() {
     'strokeStyle' => '#B7B7B7',
     'cornerRadius' => 0,
     'cssStyles' => array(
-      'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
+      'fontFamily' => 'tahoma,verdana,arial,sans-serif',
       'fontSize' => '11px',
     ),
+    'positions' => array('right', 'left'),
+    'shadow' => TRUE,
+    'shadowBlur' => 12,
+    'spikeLength' => 50,
+    'spikeGirth' => 60,
+    'centerPointY' => .1,
+    'overlap' => -8,
   );
   $styles['transparent'] = array(
     'fill' => 'rgba(0, 0, 0, .8)',
@@ -232,8 +239,8 @@ function beautytips_define_beautytips_styles() {
     'strokeStyle' => '#CC0',
     'strokeWidth' => 3,
     'spikeLength' => 40,
-    'spikeGirth' => 40,
-    'cornerRadius' => 40,
+    'spikeGirth' => 10,
+    'cornerRadius' => 5,
     'cssStyles' => array(
       'color' => '#FFF',
       'fontWeight' => 'bold',
@@ -244,24 +251,26 @@ function beautytips_define_beautytips_styles() {
     'padding' => 20,
     'strokeWidth' => 0,
     'spikeLength' => 40,
-    'spikeGirth' => 40,
-    'cornerRadius' => 15,
+    'spikeGirth' => 20,
+    'cornerRadius' => 10,
     'cssStyles' => array(
       'fontFamily' => '"lucida grande",tahoma,verdana,arial,sans-serif', 
       'fontSize' => '14px',
     ),
   );       
   $styles['google-maps'] = array(
-    'positions' => array('top', 'bottom'),
     'fill' => '#FFF',
     'padding' => 15,
     'strokeStyle' => '#ABABAB',
     'strokeWidth' => 1,
-    'spikeLength' => 65,
-    'spikeGirth' => 40,
-    'cornerRadius' => 25,
+    'spikeLength' => 50,
+    'spikeGirth' => 20,
+    'cornerRadius' => 8,
     'centerPointX' => .9,
-    'cssStyles' => array(),
+    'cssStyles' => array(
+      'fontFamily' => 'arial,sans-serif',
+      'fontSize' => '14px',
+    ),
   );
   $styles['hulu'] = array(
     'fill' => '#F4F4F4',
@@ -273,7 +282,7 @@ function beautytips_define_beautytips_styles() {
     'centerPointY' => 1,
     'cornerRadius' => 0, 
     'cssStyles' => array(
-      'fontFamily' => '"Lucida Grande",Helvetica,Arial,Verdana,sans-serif', 
+      'fontFamily' => 'Helvetica,Arial,Verdana,sans-serif',
       'fontSize' => '12px',
       'padding' => '10px 14px'
     ),
